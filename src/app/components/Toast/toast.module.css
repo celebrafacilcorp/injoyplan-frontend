@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@300;500;600;700;800;900&display=swap');
+
+.wrapper__toast {
+   position: fixed;
+   z-index: 999999;
+   right: 30px;
+   font-family: 'Quicksand' !important;
+   width: 400px;
+   top: 20px;
+   z-index: 999999;
+   box-shadow: 0px 4px 15px 0px rgba(49, 49, 49, 0.25);
+}
+
+.success {
+   background: #F1F9F4;
+   padding: 10px;
+   border-radius: 10px;
+}
+
+.error {
+   background: #FBEEEA;
+   padding: 10px;
+   border-radius: 10px;
+}
+
+.notification {
+   background: #f9f5f1;
+   padding: 10px;
+   border-radius: 10px;
+}
+
+.zIndex {
+   z-index: 999999;
+   width: 400px;
+}
+
+.content__toast {
+   display: flex;
+   align-items: center;
+/*    justify-content: center; */
+}
+
+.content__toast>div:nth-child(1) {
+   width: auto;
+   height: auto;
+   margin-right: 15px;
+}
+
+.content__toast>div:nth-child(2) {
+   width: auto;
+   height: auto;
+   margin-right: 65px;
+}
+
+.success>div:nth-child(1) svg path {
+   fill: #4EDB6A;
+   box-shadow: 0px 0px 20px 0px rgb(76 87 125 / 10%);
+}
+
+.error>div:nth-child(1) svg path {
+   fill: #FB5758;
+   box-shadow: 0px 0px 20px 0px rgb(76 87 125 / 10%);
+}
+
+.notification>div:nth-child(1) svg path {
+   fill: #FFCC80;
+   box-shadow: 0px 0px 20px 0px rgb(76 87 125 / 10%);
+}
+
+.content__toast>div:nth-child(2) svg {
+   position: absolute;
+   width: 30px;
+   height: 30px;
+   top: 15px;
+   padding: 5px;
+   right: 15px;
+   background: #fff;
+   border-radius: 20%;
+   cursor: pointer;
+}
+
+.message {
+   margin-top: 4px;
+   color: rgb(69, 67, 67);
+   font-size: 12px;
+   font-family: 'Quicksand';
+   font-weight: 4a00;
+   font-style: bold;
+}
+
+.header__toast {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.header__toast h6 {
+   font-size: 16px;
+   font-weight: 800;
+   font-family: 'Quicksand';
+}
+
+@media screen and (max-width: 768px) {
+   .wrapper__toast {
+      right: 5px;
+      top: 20px;
+   }
+}

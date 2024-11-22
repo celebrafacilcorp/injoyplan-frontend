@@ -1,0 +1,211 @@
+.wrapper__input {
+  position: relative;
+  z-index: 0;
+}
+
+.wrapper__input input[type=text],
+.wrapper__input input[type=time],
+.wrapper__input input[type=date],
+.wrapper__input input[type=password],
+.wrapper__input input[type="email"],
+.wrapper__input input[type=number], .input__table input {
+  padding: 14px 40px 14px 40px;
+  outline: none;
+  border-radius: 20px;
+  font-family: 'Quicksand';
+  background: #F6F6F6;
+  border: none;
+  width: 300px;
+  color: #18181B;
+}
+
+.wrapper__input input::placeholder {
+  color: #18181B;
+}
+
+.wrapper__input .date {
+  padding:  0.775rem 1rem 0.775rem 3.4rem  !important;
+  outline: none;
+  border-radius: 0.5rem;
+  text-align: left;
+  font-weight: 500;
+  position: relative;
+  border: 1px solid #E1E3EA;
+  outline: none;
+  background: #fff !important;
+  width: 100%;
+  color: #5E6278;
+  font-size: 11px;
+  font-family: 'Manrope';
+  position: relative;
+  transition: 0.1s;
+  height: 38px;
+}
+
+/* .wrapper__input input:focus {
+  color: #2B313D;
+  background: #fff;
+  border-color: #5F7D8C;
+  box-shadow: -0px 0px 0px 3px #f3fbff;
+} */
+
+.wrapper__input label {
+  position: relative;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5e6278;
+}
+
+.content__input {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.isSearching {
+  cursor: text;
+}
+
+.isPointer {
+  cursor: pointer;
+}
+
+.wrapper__input textarea {
+  height: 3.5rem;
+  font-size: 10px;
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+  font-family: Inter;
+  border: 1px solid #CACACA;
+  margin-bottom: 1rem;
+  outline: none;
+  width: 100%;
+  resize: none;
+  color: #5e6278;
+  height: 250px;
+}
+
+.observation {
+  padding: 0px 20px;
+}
+
+.observation textarea {
+  height: 10.5rem;
+}
+
+/* Search */
+.searchInput {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 10px 15px 10px 15px;
+  width: 300px;
+
+}
+
+.searchInput input {
+  line-height: 1.5;
+  border: none !important;
+  background: #FFFFFF;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23838D99' d='M13.22 14.63a8 8 0 1 1 1.41-1.41l4.29 4.29a1 1 0 1 1-1.41 1.41l-4.29-4.29zm-.66-2.07a6 6 0 1 0-8.49-8.49 6 6 0 0 0 8.49 8.49z'></path></svg>");
+  background-repeat: no-repeat;
+  background-position: 8px 10px;
+  background-size: 14px 14px;
+  border-bottom: 2px solid rgba(157, 163, 170, 0.2) !important;
+  padding: .5em 1em .5em 3em !important;
+  font-family: 'Manrope', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 0px !important;
+  height: 4rem !important;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px !important;
+  color: #18181B;
+}
+
+.searchInput svg path {
+  fill: #18181B;
+}
+
+.searchInput input:focus {
+  border-bottom: 2.5px solid #84A2FA !important;
+}
+
+.searchInput:focus {
+  /* outline: none; */
+  /*   border: 1px solid #84A2FA; */
+  box-shadow: 0 0 0 2px rgba(66, 89, 179, .5);
+  outline: 1px solid #84A2FA;
+}
+
+
+.cleanString {
+  cursor: pointer;
+  /*   border: 1px solid black; */
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+
+
+
+
+}
+
+.cleanString>div {
+  height: 100%;
+}
+
+.cleanString>div>svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.cleanString svg path {
+  fill: #ABAAAA;
+
+}
+
+
+.wrapperPercentage {
+  align-items: center;
+  border: 1px solid black;
+  display: flex;
+  margin: 4px 0px 10px 0px;
+  /*  justify-content: center; */
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #CACACA;
+  transition: 0.5s;
+  border-radius: 0.5rem;
+}
+
+.wrapperPercentage>input {
+  margin: 0px !important;
+  border: none !important;
+  /*  border-radius: 0 !important; */
+  width: 50%;
+
+}
+
+
+.wrapperPercentage>span {
+  font-family: Inter;
+  color: #5e6278;
+  font-size: 10px;
+  width: 50%;
+  text-align: center;
+
+}
+
+.limitedDate input {
+  border: 2px solid #f05e5e !important;
+  color: #f05e5e !important;
+}
+
+.row_active{
+/*   border: 1px solid red; */
+  background: #E4FEE8 !important;
+}
