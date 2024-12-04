@@ -5,7 +5,6 @@ interface IInput {
   type?: string;
   name: string;
   placeholder?: string;
-  handleKeyDown?: any;
   onChange?: any;
   value?: string | number;
   label?: string;
@@ -14,7 +13,6 @@ interface IInput {
   className?: string;
   onClick?: any;
   onReset?: any;
-  handleOnBlur?: (e: any) => void;
   maxLength?: number;
   autocomplete?: string;
   defaultValue?: any;
@@ -25,12 +23,9 @@ interface IInput {
   reference?: any;
   min?: any
   max?: any
-  refInput?: any;
-  onPaste?: any;
-  maxLengthCharacters?: any;
+  onPaste?: any
   readOnly?: boolean;
   rows?: number;
-  onlyNumbers?: boolean;
   item?: string;
   searching?: boolean;
   autoFocus?: boolean
@@ -42,7 +37,6 @@ const Input: FC<IInput> = ({
   searching,
   item,
   autoFocus,
-  handleKeyDown,
   isLabel,
   placeholder,
   onChange,
@@ -51,7 +45,6 @@ const Input: FC<IInput> = ({
   value,
   onClick,
   onReset,
-  handleOnBlur,
   autocomplete,
   label,
   disabled,
@@ -59,16 +52,11 @@ const Input: FC<IInput> = ({
   defaultValue,
   onKeyDown,
   reference,
-  refInput,
-  onPaste,
-  maxLengthCharacters,
-  readOnly,
   rows,
   id,
   maxLength,
   onCopy,
   onSelect,
-  onlyNumbers,
 }) => {
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
@@ -83,10 +71,6 @@ const Input: FC<IInput> = ({
       reference,
       searching,
       onKeyDown,
-      refInput,
-      onPaste,
-      maxLengthCharacters,
-      readOnly,
       rows,
       placeholder,
       onChange,
@@ -95,12 +79,9 @@ const Input: FC<IInput> = ({
       onCopy,
       onSelect,
       autoFocus,
-      onlyNumbers,
       value,
       onClick,
       onReset,
-      handleOnBlur,
-      handleKeyDown,
       disabled,
       className,
       ref: inputRef,
@@ -119,35 +100,7 @@ const Input: FC<IInput> = ({
         e.key === "Tab" ||
         ((e.ctrlKey || e.metaKey) &&
           (e.key.toLowerCase() === "c" || e.key.toLowerCase() === "x" || e.key.toLowerCase() === "v")); // Permite copiar, cortar y pegar
-
-      if (onlyNumbers && !isControlKey && !/[0-9]/.test(e.key)) {
-        e.preventDefault();
-      }
     };
-
-    if (type === "text" && onlyNumbers) {
-      return (
-        <input
-          onPaste={onPaste}
-          onKeyDown={handleKeyPress}
-          maxLength={maxLength}
-          onSelect={onSelect}
-          name={name}
-          id={id}
-          autoFocus={autoFocus}
-          defaultValue={defaultValue}
-          autoComplete={autocomplete}
-          onBlur={handleOnBlur}
-          value={value}
-          onClick={onClick}
-          disabled={disabled}
-          type={type}
-          placeholder={placeholder}
-          onChange={onChange}
-          ref={refInput}
-        />
-      );
-    }
 
     if (item === "numberOfSerieState" && type === "text") {
       return (
@@ -159,7 +112,6 @@ const Input: FC<IInput> = ({
           autoComplete={autocomplete}
           x-webkit-speech
           autoFocus
-          onBlur={handleOnBlur}
           /* readOnly={searching} */ value={value}
           onClick={onClick}
           disabled={disabled}
@@ -167,7 +119,6 @@ const Input: FC<IInput> = ({
           type={type}
           placeholder={placeholder}
           onChange={onChange}
-          onKeyDown={handleKeyDown}
           ref={reference}
           onKeyPress={(e) =>
             !/^[0-9]*[.,]?[0-9]*$/.test(e.key) && e.preventDefault()

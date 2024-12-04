@@ -1,0 +1,30 @@
+import { ICategoriesState, useCategoriesState } from "@/app/zustand/categories";
+import Slide from "./Slide";
+import { useEffect } from "react";
+
+const RelatedEvents = ({data} : any) => {
+
+    const { getCategoriesRelations, categoriesRelations }: ICategoriesState = useCategoriesState();
+
+    useEffect(() => {
+        if (data.length > 0) {
+            getCategoriesRelations(data[0].categoria_id);
+        }
+    }, [data])
+
+    return (
+        <>
+            {
+                categoriesRelations?.length > 0 && (
+                    <div>
+                        <h3 className="font-[Quicksand] font-bold text-xl mb-6 mt-6">Te puede interesar más eventos de esta categoria</h3>
+                        <Slide categoriesRelations={categoriesRelations} />
+                    </div>
+                )
+            }
+        </>
+
+    )
+}
+
+export default RelatedEvents;

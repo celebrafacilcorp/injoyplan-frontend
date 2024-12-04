@@ -277,7 +277,8 @@ const SelectPro = ({
           >
             {resultsOptions && resultsOptions?.length > 0 ? (
               resultsOptions?.map((item: IOption, index: number) => (
-                <motion.div>
+                <motion.div
+                key={index}>
                   <li id={`option-${index}`}
                     className={index === selectedOptionIndex ? `${styles.selected} ? ${styles.selectedOption}` : ''}
 

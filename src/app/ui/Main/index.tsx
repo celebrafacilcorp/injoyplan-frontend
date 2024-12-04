@@ -33,9 +33,9 @@ const Main = () => {
                     <div className='grid grid-cols-2 gap-x-11 gap-y-3'>
                         {
                             countsCategories?.map((item: any, index: number) => (
-                                <div className='relative cursor-pointer' key={index} onClick={() => navigateByCategory(item)}>
+                                <div className='relative cursor-pointer z-0' key={index} onClick={() => navigateByCategory(item)}>
                                     <div className='flex justify-center bg-[#861f21] p-5 py-6 rounded w-10/12 mx-auto relative z-50'>
-                                        <Image width={50} height={50} src={item.iconos} alt="logomusica" className={styles.musica} />
+                                        <Image width={50} height={50} className='z-0' src={item.iconos} alt="logomusica" />
                                     </div>
                                     <div className='bg-[#F6F6F6] pt-7 p-4 relative -top-5 z-0 rounded'>
                                         <h3 className='text-[18px] text-[#444] font-bold'>{item?.nombreCategoria}</h3>

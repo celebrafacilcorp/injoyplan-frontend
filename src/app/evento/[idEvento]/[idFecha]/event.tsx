@@ -15,6 +15,7 @@ import ReactHtmlParser from 'react-html-parser'
 import Map from '@/app/components/Map';
 import useIsMobile from '@/app/hooks/useIsMobile';
 import Link from 'next/link';
+import RelatedEvents from '@/app/ui/RelatedEvents';
 
 moment.locale('es');
 
@@ -177,9 +178,10 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                             e.stopPropagation(); // Evitar que el clic en el ícono de favorito navegue a la página del evento
                             addFavoritesByUser(data[0]);
                         }}>
-                            {data[0].favorito > 0 ? <div>
+                            {data[0].favorito > 0 ? <div className='flex items-center'>
                                 <Icon color='A3ABCC' width={20} icon="mdi:heart" /><span className='text-[#A3ABCC] ml-3 font-bold text-md'>Favorito</span>
-                            </div> : <div className='flex'>
+                            </div> : 
+                            <div className='flex items-center'>
                                 <Image src={fav} alt="fav" /><span className='text-[#A3ABCC] ml-3 font-bold text-md'>Favorito</span>
                             </div>}
                         </div>
@@ -226,7 +228,7 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                             {
                                 dataPlataformaVenta?.map((item: any, index: number) => (
                                     <div className='bg-[#9B292B] mt-6 p-4 text-center rounded-full' key={index}>
-                                        <Link className='flex items-center justify-center text-[#fff] font-bold' rel="noopener noreferrer" target="_blank" href={`https://${item.urlWebLugar}`}><button className='flex items-center'><Image width={30} height={30} className='mr-3' src={item.iconos} alt="loguito" />{item.nombrePlataforma}</button></Link>
+                                        <Link className='flex items-center justify-center text-[#fff] font-bold' rel="noopener noreferrer" target="_blank" href={`https://${item.urlWebLugar}`}><button className='flex items-center'><Image width={20} height={20} className='mr-3' src={item.iconos} alt="loguito" />{item.nombrePlataforma}</button></Link>
                                     </div>
                                 ))
                             }
@@ -252,7 +254,7 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                 </div>
             </div>
 
-            {/* { categoriesRelations?.code ? "" : <Slide categoriesRelations={categoriesRelations} /> } */}
+            { categoriesRelations?.code ? "" : <RelatedEvents data={data} /> }
         </div >
 
 
