@@ -122,8 +122,52 @@
   padding: 10px; /* Agrega espacio horizontal entre las tarjetas */
 }
 
+.slick-list {
+  height: 440px !important;
+}
+
+.slick-list > div {
+  height: 98% !important;
+}
+
+.slick-list > div > div > div {
+  height: 94%;
+}
+
+.slick-list img {
+  height: 100% !important;
+}
+
 .slide .slick-slide {
   padding: 0 !important;
+}
+
+.scrollbar {
+  border-radius: 28px !important;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.1); /* Color del thumb y track */
+}
+
+.scrollbar::-webkit-scrollbar {
+  border-radius: 28px;
+  width: 4px; /* Ancho del scrollbar vertical */
+  height: 4px; /* Alto del scrollbar horizontal */
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 28px;
+  background: rgba(0, 0, 0, 0.5); /* Color del thumb */
+  border-radius: 9999px; /* Bordes redondeados */
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  border-radius: 28px;
+  background: rgba(0, 0, 0, 0.8); /* Color al hover */
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.1); /* Color del track */
 }
 
 @media (max-width: 600px) {
@@ -131,12 +175,22 @@
     margin-bottom: 0;
   }
 
-  .slick-slider .slick-list {
-    height: 370px;
-    border-radius: 0px !important;
-  }
-
   .slick-slider button {
     display: none !important;
+  }
+  .slick-list {
+    height: 350px !important;
+  }
+  
+  .slick-list > div {
+    height: 98% !important;
+  }
+  
+  .slick-list > div > div > div {
+    height: 94%;
+  }
+  
+  .slick-list img {
+    height: 100% !important;
   }
 }

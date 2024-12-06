@@ -13,8 +13,7 @@ export default {
         'custom-2': '0px 0px 8px 0px rgba(163, 171, 204, 0.4)', // Segunda sombra
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        customText: 'rgba(134, 31, 33, 0.8)', // Color personalizado
       },
     },
   },

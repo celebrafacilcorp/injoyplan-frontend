@@ -65,35 +65,34 @@ const Slide = () => {
             {/* // banners?.length === 0 ? ( */}
             {/* // banners.map((item: any) => ( */}
 
-            <div>
-                <div className="max-h-[410px]">
-                    <Image src={banner} alt="banner" className="w-full h-full" objectFit="fill" />
-                    <div className={styles.content__info}>
+            <div className="h-full">
+                <div className="h-full">
+                    <Image src={banner} alt="banner" className="w-full h-full object-cover" />
+                    <div className="absolute md:top-40 top-10 left-6">
                         <div>
-                            <h4>Estamos JOBdidos Vol. 2</h4>
-                            <div className={styles.date__format}>
-                                <div>
-                                    VIE 15 ENE
+                            <h4 className="bg-customText text-[#fff] rounded text-3xl p-2 w-fit">Estamos JOBdidos Vol. 2</h4>
+                            <div>
+                                <div className="flex items-center w-fit bg-customText text-[#fff] rounded text-md p-2 ">
+                                    <p className="ml-2">VIE <strong className="font-normal block">15 ENE</strong></p>
                                     {/* {moment(item.FechaInicio).format('ddd').toUpperCase()} */}
-                                    <div>
-                                        20:00 - 21:00 Joinnus Live
+                                    <div className="border-l border-solid border-[#fff] ml-4">
+                                       <p className="ml-3"> 20:00 - 21:00 Joinnus Live</p>
                                         {/* {moment(item.FechaInicio).format('DD MMM').toUpperCase()} */}
                                     </div>
                                 </div>
-                                <div style={{ marginLeft: "10px" }}>
+                                <div>
                                     {/* {item.HoraInicio}-{item.HoraFinal} */}
                                 </div>
                             </div>
-                            <a rel="noopener noreferrer" target="_blank" 
+                            <a className=" bg-customText p-3 text-md relative top-2 rounded uppercase text-[#fff]" rel="noopener noreferrer" target="_blank" 
                             // href={`https://${item.urlFuente}`}
                             >Conoce más</a>
                         </div>
                     </div>
-
                 </div>
-                <Link className='absolute bottom-[-20px] z-50 flex text-[11px] mt-2 text-[#A3ABCC] font-bold' href={`#`} target="_blank" rel="noopener noreferrer">
+                <Link className='absolute md:bottom-[-0px] bottom-[-5px] z-50 flex justify-center text-[11px] md:text-left xl:text-left md:justify-start mt-2 text-[#A3ABCC] font-bold w-full text-center' href={`#`} target="_blank" rel="noopener noreferrer">
                     VER FUENTE
-                    <Image className='ml-1' src={Angle} height={10} width={10} alt='Angulo' />
+                    <Image className='ml-1 relative top-0.5' src={Angle} height={10} width={10} alt='Angulo' />
                 </Link>
             </div>
             {/* )

@@ -1,5 +1,4 @@
 "use client";
-import styles from './main.module.css'
 import flecha from '../../../../public/svg/right.svg'
 import flechazul from '../../../../public/svg/blueright.svg'
 import Slide from './Slider'
@@ -23,14 +22,14 @@ const Main = () => {
 
     return (
         <div className="">
-           <div className="xl:max-w-screen-2xl md:max-w-screen-xl px-0 mx-auto grid grid-cols-12 gap-10">
-                <div className="col-start-1 col-span-9 mt-12">
+           <div className="2xl:max-w-screen-2xl xl:max-w-screen-xl max-w-screen-md px-0 mx-auto grid grid-cols-12 gap-10 xl:px-10">
+                <div className="xl:col-start-1 xl:col-end-9 md:col-start-1 md:col-end-13 xl:mt-12 md:mt-6 col-start-1 col-end-13">
                     <div>
                         <Slide />
                     </div>
                 </div>
-                <div className="col-start-10 col-span-6 w-full mt-12">
-                    <div className='grid grid-cols-2 gap-x-11 gap-y-3'>
+                <div className="xl:col-start-9 scrollbar-thumb-gray-700 scrollbar-track-gray-200 scrollbar  xl:col-end-13 md:col-start-1 md:col-end-13 xl:mt-12 md:mt-0 w-full col-start-1 col-end-13 md:overflow-hidden overflow-x-scroll md:px-0 px-10">
+                    <div className='grid xl:grid-cols-2 gap-x-11 gap-y-3 md:grid-cols-4 grid-cols-4 gap-3 md:w-auto w-[900px]'>
                         {
                             countsCategories?.map((item: any, index: number) => (
                                 <div className='relative cursor-pointer z-0' key={index} onClick={() => navigateByCategory(item)}>
@@ -44,10 +43,10 @@ const Main = () => {
                                 </div>
                             ))
                         }
-                        <div className='flex grid-cols-3 justify-end w-full col-start-1 col-span-2'>
+                        <div className='flex justify-end w-full xl:col-start-1 xl:col-end-3 md:col-start-1 md:col-end:5 col-start-1 col-end-2 mt-3'>
                             <Link href="/busqueda/0" className='flex items-center'> 
-                            <h4 className='text-[14px] text-[#007FA4] font-bold relative -top-4'>TODAS LAS CATEGORÍAS + 10 </h4> 
-                            <Image className='ml-2 -top-4 relative' src={flechazul} alt="flecha-azul" /></Link>
+                            <h4 className='md:text-[14px] text-[#007FA4] font-bold relative -top-7 text-[12px]'>TODAS LAS CATEGORÍAS + 10 </h4> 
+                            <Image className='ml-2 -top-7 relative' src={flechazul} alt="flecha-azul" /></Link>
                         </div>
                     </div>
                 </div>

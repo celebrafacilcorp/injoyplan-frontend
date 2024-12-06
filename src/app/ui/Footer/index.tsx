@@ -1,77 +1,141 @@
-// import styles from './footer.module.css'
-import mail from '../../../../public/svg/email.svg'
-import facebook from '../../../../public/svg/facebook.svg'
-import twi from '../../../../public/svg/twitter.svg'
-import youtube from '../../../../public/svg/youtube.svg'
-import instagram from '../../../../public/svg/instagram.svg'
-import libro from '../../../../public/svg/book.svg'
-import Link from 'next/link'
-import Image from 'next/image'
-import { sans } from '../../../../public/fonts'
-
+"use client"
+// import styles from './footer.module.css';
+import mail from '../../../../public/svg/email.svg';
+import facebook from '../../../../public/svg/facebook.svg';
+import twi from '../../../../public/svg/twitter.svg';
+import youtube from '../../../../public/svg/youtube.svg';
+import instagram from '../../../../public/svg/instagram.svg';
+import libro from '../../../../public/svg/book.svg';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
 
 const Footer = () => {
-    return (
-        <div className='border-t border-[#f1f1f1]'>
-            <footer className=''>
-                <div className='mx-auto xl:max-w-screen-2xl md:max-w-screen-xl pt-16 pb-16'>
-                    <div className='flex justify-between'>
-                        <div>
-                            <h3 className='font-bold text-xl'>Conócenos</h3>
-                            <Link href='/nosotros'><p className={`${sans.className} font-[300] mt-6 text-[#212121]`}>Acerca de nosotros</p></Link>
-                        </div>
-                        <div>
-                            <h3 className='font-bold text-xl'>¿Necesitas ayuda?</h3>
-                            <Link href="/preguntas-frecuentes"><p className={`${sans.className} font-[300] mt-6 text-[#212121]`}>Preguntas frecuentes</p></Link>
-                            <Link href="/contactanos"><p className={`${sans.className} font-[300] mt-6 text-[#212121]`}>Contáctanos</p></Link>
-                        </div>
-                        <div>
-                            <h3 className='font-bold text-xl'>Políticas</h3>
-                            <Link href="/politicas-privacidad"><p className={`${sans.className} font-[300] mt-6 text-[#212121]`}>Política de privacidad</p></Link>
-                            <p className={`${sans.className} font-[300] mt-6 text-[#212121]`}>Política de cookies</p>
-                            <Link href="/terminos-y-condiciones"><p className={`${sans.className} font-[300] mt-6 text-[#212121]`}>Términos y condiciones de uso</p></Link>
-                        </div>
-                        <div>
-                            <h3 className='font-bold text-xl'>Contáctanos</h3>
-                            <p className={`${sans.className} font-[300] mt-6 text-[#212121]`}>Escríbenos a nuestra casilla de correo:</p>
-                            <strong className='font-sans text-xl flex items-center text-[#007FA4] mt-6 font-normal'><Image className='mr-2' src={mail} alt="mail" /> Contacto@injoyplan.com</strong>
-                        </div>
-                    </div>
+  const [openSection, setOpenSection] = useState(null);
 
+  const toggleSection = (section: any) => {
+    setOpenSection(openSection === section ? null : section);
+  };
 
-                </div>
-                <div className='bg-[#303033]'>
-                    <div className='mx-auto xl:max-w-screen-2xl md:max-w-screen-xl pt-8 pb-8 flex justify-between items-center'>
-                        <div>
-                            <p className='text-[#fff]'>Copyright © 2021 Injoyplan</p>
-                        </div>
-                        <div className='flex items-center'>
-                            <div className='flex justify-between border-r border-solid border-[rgba(255,255,255,0.1)]'>
-                                <div>
-                                    <Image className='p-2 mr-6 border border-solid rounded-full' width={40} height={40} objectFit='cover' src={facebook} alt="facebook" />
-                                </div>
-                                <div>
-                                    <Image className='p-2 mr-6 border border-solid rounded-full' width={40} height={40} objectFit='cover' src={twi} alt="twi" />
-                                </div>
-                                <div>
-                                    <Image className='p-2 mr-6 border border-solid rounded-full' width={40} height={40} objectFit='cover' src={youtube} alt="youtube" />
-                                </div>
-                                <div>
-                                    <Image className='p-2 mr-6 border border-solid rounded-full' width={40} height={40} objectFit='cover' src={instagram} alt="instagram" />
-                                </div>
-                            </div>
-                            <div className='ml-6 flex justify-center text-center'>
-                                <div className='text-center mx-auto w-full'>
-                                    <Image width={50} height={50} className='text-center mx-auto' src={libro} alt="libro" />
-                                    <p className='text-[#fff] text-sm'>Libro de Reclamaciones</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+  return (
+    <div className="border-t border-[#f1f1f1]">
+      <footer>
+        {/* Desktop View */}
+        <div className="hidden md:block mx-auto 2xl:max-w-screen-2xl xl:max-w-screen-xl max-w-screen-md pt-16 pb-16 xl:px-10">
+          <div className="flex justify-between flex-wrap">
+            <div>
+              <h3 className="font-bold text-xl">Conócenos</h3>
+              <Link href="/nosotros">
+                <p className="font-light mt-6 text-[#212121]">Acerca de nosotros</p>
+              </Link>
+            </div>
+            <div>
+              <h3 className="font-bold text-xl">¿Necesitas ayuda?</h3>
+              <Link href="/preguntas-frecuentes">
+                <p className="font-light mt-6 text-[#212121]">Preguntas frecuentes</p>
+              </Link>
+              <Link href="/contactanos">
+                <p className="font-light mt-6 text-[#212121]">Contáctanos</p>
+              </Link>
+            </div>
+            <div>
+              <h3 className="font-bold text-xl">Políticas</h3>
+              <Link href="/politicas-privacidad">
+                <p className="font-light mt-6 text-[#212121]">Política de privacidad</p>
+              </Link>
+              <p className="font-light mt-6 text-[#212121]">Política de cookies</p>
+              <Link href="/terminos-y-condiciones">
+                <p className="font-light mt-6 text-[#212121]">Términos y condiciones de uso</p>
+              </Link>
+            </div>
+            <div>
+              <h3 className="font-bold text-xl">Contáctanos</h3>
+              <p className="font-light mt-6 text-[#212121]">Escríbenos a nuestra casilla de correo:</p>
+              <strong className="text-xl flex items-center text-[#007FA4] mt-6 font-normal">
+                <Image className="mr-2" src={mail} alt="mail" /> Contacto@injoyplan.com
+              </strong>
+            </div>
+          </div>
         </div>
-    )
-}
 
-export default Footer
+        {/* Mobile View */}
+        <div className="block md:hidden mx-auto max-w-screen-md px-4 pt-8 pb-8">
+          {[
+            { title: 'Conócenos', links: [{ label: 'Acerca de nosotros', href: '/nosotros' }] },
+            {
+              title: '¿Necesitas ayuda?',
+              links: [
+                { label: 'Preguntas frecuentes', href: '/preguntas-frecuentes' },
+                { label: 'Contáctanos', href: '/contactanos' },
+              ],
+            },
+            {
+              title: 'Políticas',
+              links: [
+                { label: 'Política de privacidad', href: '/politicas-privacidad' },
+                { label: 'Política de cookies', href: '#' },
+                { label: 'Términos y condiciones de uso', href: '/terminos-y-condiciones' },
+              ],
+            },
+          ].map((section, index) => (
+            <div key={index} className="mb-4">
+              <h3
+                className="font-bold text-lg flex justify-between items-center cursor-pointer"
+                onClick={() => toggleSection(index)}
+              >
+                {section.title}
+                <span className="text-xl">{openSection === index ? '-' : '+'}</span>
+              </h3>
+              {openSection === index && (
+                <div className="mt-4 space-y-2">
+                  {section.links.map((link, idx) => (
+                    <Link href={link.href} key={idx} className="text-[#212121] text-sm font-light">
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Contact Section */}
+          <div>
+            <h3 className="font-bold text-lg">Contáctanos</h3>
+            <p className="text-sm text-[#212121] mt-4">Escríbenos a nuestra casilla de correo:</p>
+            <div className="flex items-center text-[#007FA4] mt-2">
+              <Image src={mail} alt="mail" width={24} height={24} className="mr-2" />
+              <strong>Contacto@injoyplan.com</strong>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Bottom */}
+        <div className="bg-[#303033]">
+          <div className="mx-auto 2xl:max-w-screen-2xl xl:max-w-screen-xl max-w-screen-md pt-8 pb-8 flex flex-col sm:flex-row justify-between items-center xl:px-10">
+            {/* Social Icons */}
+            <div className="flex items-center space-x-4">
+              {[facebook, twi, youtube, instagram].map((icon, index) => (
+                <div key={index} className="p-2 border rounded-full hover:bg-gray-700">
+                  <Image src={icon} alt={`icon-${index}`} width={32} height={32} />
+                </div>
+              ))}
+            </div>
+
+            {/* Libro de Reclamaciones */}
+            <div className="text-center mt-4 sm:mt-0">
+              <Image src={libro} alt="libro" width={40} height={40} />
+              <p className="text-white text-sm">Libro de Reclamaciones</p>
+            </div>
+
+            {/* Copyright */}
+            <div className="text-white text-sm mt-4 sm:mt-0">
+              Copyright © 2021 Injoyplan
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default Footer;
