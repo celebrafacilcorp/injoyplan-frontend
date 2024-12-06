@@ -297,12 +297,12 @@ const EventsFeatured = ({ setOpenAuth }: IProps) => {
 
     return (
         <div className='bg-[#FAFBFF] pb-[80px]'>
-            <div className="max-w-screen-2xl md:max-w-screen-xl mx-auto mt-16">
-                <div className="">
-                    <div className='pt-16'>
-                        <h2 className='text-3xl mb-8 font-bold'>Eventos destacados</h2>
+            <div className="xl:max-w-screen-2xl md:max-w-screen-xl mx-auto mt-16">
+                <div className="md:px-0 px-10">
+                    <div className='md:pt-16 pt-14'>
+                        <h2 className='text-3xl mb-8 font-bold text-[#444444] md:text-[#212121]'>Eventos destacados</h2>
                     </div>
-                    <div className="grid auto-cols-min grid-cols-3 gap-5">
+                    <div className="grid auto-cols-min grid-cols-1 gap-5 xl:grid-cols-4 md:grid-cols-3">
                         {
                             destacades.map((item: any, index: number) => {
                                 return (

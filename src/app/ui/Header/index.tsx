@@ -80,7 +80,7 @@ const Header = () => {
     return (
         <div className="border-b border-solid border-[#e9e9e9] bg-[#F9FAFC]">
             <Auth openAuth={openAuth} setOpenAuth={setOpenAuth} />
-            <div className="max-w-screen-2xl md:max-w-screen-xl h-18 py-5 mx-auto items-center grid grid-cols-12">
+            <div className="xl:max-w-screen-2xl md:max-w-screen-xl h-18 py-5 mx-auto items-center grid grid-cols-12">
                 <Link className='w-44' href="/"><Image src={logo} alt="logo" height={300} width={300} /></Link>
 
                 <div className={

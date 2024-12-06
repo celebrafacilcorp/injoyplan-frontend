@@ -23,13 +23,13 @@ const Main = () => {
 
     return (
         <div className="">
-           <div className="max-w-screen-2xl md:max-w-screen-xl px-0 mx-auto grid grid-cols-12 gap-10">
-                <div className="col-start-1 col-span-8 mt-12">
+           <div className="xl:max-w-screen-2xl md:max-w-screen-xl px-0 mx-auto grid grid-cols-12 gap-10">
+                <div className="col-start-1 col-span-9 mt-12">
                     <div>
                         <Slide />
                     </div>
                 </div>
-                <div className="col-start-9 col-span-5 w-full mt-12">
+                <div className="col-start-10 col-span-6 w-full mt-12">
                     <div className='grid grid-cols-2 gap-x-11 gap-y-3'>
                         {
                             countsCategories?.map((item: any, index: number) => (

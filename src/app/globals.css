@@ -122,6 +122,10 @@
   padding: 10px; /* Agrega espacio horizontal entre las tarjetas */
 }
 
+.slide .slick-slide {
+  padding: 0 !important;
+}
+
 @media (max-width: 600px) {
   #map-container {
     margin-bottom: 0;

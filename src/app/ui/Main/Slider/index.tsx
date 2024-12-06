@@ -3,9 +3,11 @@ import styles from '../main.module.css'
 import { useEffect } from "react";
 import { IBannersState, useBannersStore } from "../../../zustand/banners";
 import moment from "moment";
-import BannerSkeleton from "../../../components/Skeletons/banner";
+// import BannerSkeleton from "../../../components/Skeletons/banner";
 import banner from '../../../../../public/svg/banner.svg'
 import Image from "next/image";
+import Angle from '../../../../../public/svg/angle_right.svg'
+import Link from "next/link";
 moment.locale('es');
 
 const Slide = () => {
@@ -58,41 +60,45 @@ const Slide = () => {
     console.log(banners)
 
     return (
-        <Slider {...settings}>
-            {
-                banners?.length === 0 ? (
-                    banners.map((item: any) => (
-                        <>
-                            <div className={styles.content__slideImg}>
-                                <Image src={banner} alt="banner" className="w-full" width={500} height={500} />
-                                <div className={styles.content__info}>
+        <Slider className="slide" {...settings}>
+            {/* { */}
+            {/* // banners?.length === 0 ? ( */}
+            {/* // banners.map((item: any) => ( */}
+
+            <div>
+                <div className="max-h-[410px]">
+                    <Image src={banner} alt="banner" className="w-full h-full" objectFit="fill" />
+                    <div className={styles.content__info}>
+                        <div>
+                            <h4>Estamos JOBdidos Vol. 2</h4>
+                            <div className={styles.date__format}>
+                                <div>
+                                    VIE 15 ENE
+                                    {/* {moment(item.FechaInicio).format('ddd').toUpperCase()} */}
                                     <div>
-                                        <h4>{item.titulo}</h4>
-                                        <div className={styles.date__format}>
-                                            <div>
-                                                {moment(item.FechaInicio).format('ddd').toUpperCase()}
-                                                <div>
-                                                    {moment(item.FechaInicio).format('DD MMM').toUpperCase()}
-                                                </div>
-                                            </div>
-                                            <div style={{ marginLeft: "10px" }}>
-                                                {item.HoraInicio}-{item.HoraFinal}
-                                            </div>
-                                        </div>
-                                        <a rel="noopener noreferrer" target="_blank" href={`https://${item.urlFuente}`}>Conoce más</a>
+                                        20:00 - 21:00 Joinnus Live
+                                        {/* {moment(item.FechaInicio).format('DD MMM').toUpperCase()} */}
                                     </div>
                                 </div>
+                                <div style={{ marginLeft: "10px" }}>
+                                    {/* {item.HoraInicio}-{item.HoraFinal} */}
+                                </div>
+                            </div>
+                            <a rel="noopener noreferrer" target="_blank" 
+                            // href={`https://${item.urlFuente}`}
+                            >Conoce más</a>
+                        </div>
+                    </div>
 
-                            </div>
-                            <div className={styles.fuent}>
-                                <h4>VER FUENTE </h4>
-                                {/* <img className={styles.blueGray} src={flechaceleste} alt="flecha-celeste" /> */}
-                            </div>
-                        </>
-                    )
-                    )
+                </div>
+                <Link className='absolute bottom-[-20px] z-50 flex text-[11px] mt-2 text-[#A3ABCC] font-bold' href={`#`} target="_blank" rel="noopener noreferrer">
+                    VER FUENTE
+                    <Image className='ml-1' src={Angle} height={10} width={10} alt='Angulo' />
+                </Link>
+            </div>
+            {/* )
                 ) : <BannerSkeleton />
-            }
+            } */}
         </Slider>
     )
 }

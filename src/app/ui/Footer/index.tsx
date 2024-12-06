@@ -14,7 +14,7 @@ const Footer = () => {
     return (
         <div className='border-t border-[#f1f1f1]'>
             <footer className=''>
-                <div className='mx-auto max-w-screen-2xl md:max-w-screen-xl pt-16 pb-16'>
+                <div className='mx-auto xl:max-w-screen-2xl md:max-w-screen-xl pt-16 pb-16'>
                     <div className='flex justify-between'>
                         <div>
                             <h3 className='font-bold text-xl'>Conócenos</h3>
@@ -41,7 +41,7 @@ const Footer = () => {
 
                 </div>
                 <div className='bg-[#303033]'>
-                    <div className='mx-auto max-w-screen-2xl md:max-w-screen-xl pt-8 pb-8 flex justify-between items-center'>
+                    <div className='mx-auto xl:max-w-screen-2xl md:max-w-screen-xl pt-8 pb-8 flex justify-between items-center'>
                         <div>
                             <p className='text-[#fff]'>Copyright © 2021 Injoyplan</p>
                         </div>

@@ -35,12 +35,12 @@ const Events = ({ setPage, setOpenAuth }: any) => {
 
     return (
         <div className='bg-[#fff]'>
-            <div className="max-w-screen-2xl md:max-w-screen-xl mx-auto mt-6">
-                <div className="">
-                    <div className='pt-16'>
-                        <h2 className='text-3xl mb-8 font-bold'>Más eventos para ti</h2>
+            <div className="xl:max-w-screen-2xl md:max-w-screen-lg mx-auto mt-6">
+                <div className="md:px-0 px-10">
+                    <div className='md:pt-16 pt-6'>
+                        <h2 className='text-3xl mb-8 font-bold text-[#444444] md:text-[#212121]'>Más eventos para ti</h2>
                     </div>
-                    <div className="grid auto-cols-min grid-cols-4 gap-5">
+                    <div className="grid auto-cols-min grid-cols-1 gap-5 md:grid-cols-4 xl:grid-cols-4">
                         {
                             eventsNoDestacades.map((item: Event, index: number) => {
                                 return (

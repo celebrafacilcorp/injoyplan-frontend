@@ -21,12 +21,12 @@ const Card = ({ item, addFavoritesByUser }: IProps) => {
             animate={{ opacity: 1, y: 0 }}  // Animación al entrar (desplazamiento hacia arriba)
             exit={{ opacity: 0, y: -50 }}  // Animación al salir (desplazamiento hacia abajo)
             transition={{ duration: 0.5, ease: "easeInOut" }}  // Transición suave
-            className='min-h-[470px] flex flex-col justify-between'
+            className='min-h-[470px] flex flex-col justify-between w-full mb-5 md:mb-5'
         >
             <Link
                 href={`/evento/${item.ideventos}/${item.idfecha}`}
-                className='h-full'>
-                <div className="bg-[#fff] h-full rounded-t-2xl rounded-b-2xl border border-solid] shadow-custom-2 group">
+                className='h-full w-full'>
+                <div className="bg-[#fff] h-full w-full rounded-t-2xl rounded-b-2xl border border-solid] shadow-custom-2 group">
                     <div className='w-full h-56 rounded-t-2xl relative'>
                         <Image src={item.url} alt="img2" width={400} height={400} className='h-full w-full object-fill rounded-t-2xl' />
                         <div onClick={(e) => {
