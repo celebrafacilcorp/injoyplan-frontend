@@ -1,9 +1,9 @@
-import Busqueda from "./[value]/page";
+import BusquedaEvento from "./[value]/page";
 
 const Search = () => {
     return (
         <div>
-            <Busqueda searchValue="" />
+            <BusquedaEvento />
         </div>
     )
 }

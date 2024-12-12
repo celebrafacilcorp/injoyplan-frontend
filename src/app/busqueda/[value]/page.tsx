@@ -22,7 +22,7 @@ import useOutsideClick from "@/app/hooks/useOutsideClick";
 import ReactModal from "react-modal";
 
 
-const Busqueda = ({ searchValue, setOpenAuth, auth }: any) => {
+const BusquedaEvento = ({ searchValue, setOpenAuth, auth }: any) => {
 
     moment.updateLocale('es', {
         months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
@@ -323,4 +323,4 @@ const Busqueda = ({ searchValue, setOpenAuth, auth }: any) => {
     )
 }
 
-export default Busqueda;
+export default BusquedaEvento;
