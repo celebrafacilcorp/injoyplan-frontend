@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import Main from "./ui/Main";
 import { useEffect, useState } from "react";
 import { IEventsState, useEventStore } from "./zustand/events";
@@ -11,11 +12,13 @@ import Auth from "./ui/Auth";
 import Categories from "./ui/Categories";
 
 export default function Home() {
-
   const [openAuth, setOpenAuth] = useState<boolean>(false);
-  const [openCategories, setOpenCategories] = useState<boolean>(true);
+  const [openCategories, setOpenCategories] = useState<boolean>(false); // Inicializamos en falso
   const [limit, setLimit] = useState(12);
   const [loading, setLoading] = useState<boolean>(true);
+  const [hasVisited, setHasVisited] = useState<boolean | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<string | null>(null);
+
   const { getEvents }: IEventsState = useEventStore();
   const { getCategoriesCount }: ICategoriesState = useCategoriesState();
 
@@ -24,58 +27,67 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getEvents(limit);  // Pasamos el límite actual
+    getEvents(limit); // Pasamos el límite actual
   }, [limit]);
-
 
   useEffect(() => {
     getCategoriesCount();
-  }, [])
-
-  const hasVisited = localStorage.getItem("hasVisited");
-  const selectedCategories = localStorage.getItem("selectedCategories");
+  }, []);
 
   useEffect(() => {
-    if (hasVisited) {
-      setLoading(false);
-    } else {
+    // Accede a localStorage solo en el cliente
+    const visited = localStorage.getItem("hasVisited");
+    const categories = localStorage.getItem("selectedCategories");
+
+    setHasVisited(visited ? true : false);
+    setSelectedCategories(categories);
+
+    // Configuramos openCategories si no hay categorías seleccionadas
+    if (!categories) {
+      setOpenCategories(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (hasVisited === false) {
       localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("selectedCategories", "[]");
       const timer = setTimeout(() => {
         setLoading(false);
-      }, 2000);  // Ajusta el tiempo según tus necesidades
+      }, 2000); // Ajusta el tiempo según tus necesidades
       return () => clearTimeout(timer);
     }
   }, [hasVisited]);
 
-
-
   useEffect(() => {
-    const isVisited = localStorage.getItem('hasVisited');
-    if (isVisited) {
-      setLoading(true)
+    if (hasVisited) {
+      setLoading(true);
       setTimeout(() => {
-        setLoading(false)
+        setLoading(false);
       }, 2500);
     }
-  }, []); // Se ejecuta cada vez que se carga la página
+  }, [hasVisited]); // Se ejecuta cada vez que `hasVisited` cambia
 
-  console.log(hasVisited)
-
-  if (loading === true && !hasVisited) {
+  if (loading && selectedCategories?.length === 0) {
     return <LoadingPage />;
   }
 
-  // if (loading === true && hasVisited) {
-  //   return <Loading />;
-  // }
+  console.log("hasVisited:", hasVisited);
+  console.log("selectedCategories:", selectedCategories);
+  console.log("openCategories:", openCategories);
 
   return (
     <div>
       <div>
-        { hasVisited && selectedCategories === null && <Categories setOpenCategories={setOpenCategories} openCategories={openCategories} /> }
+        {openCategories && (
+          <Categories
+            setOpenCategories={setOpenCategories}
+            openCategories={openCategories}
+          />
+        )}
         <Main />
         <EventsFeatured setOpenAuth={setOpenAuth} />
-        <Events setOpenAuth={setOpenAuth} />
+        <Events setLimit={setLimit} setOpenAuth={setOpenAuth} />
         <MailBox />
       </div>
       <Auth openAuth={openAuth} setOpenAuth={setOpenAuth} />

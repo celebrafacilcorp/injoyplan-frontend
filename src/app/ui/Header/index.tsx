@@ -85,7 +85,7 @@ const Header = () => {
                 <Link className='w-44' href="/"><Image src={logo} alt="logo" height={300} width={300} /></Link>
                 <div className={
                     isMobile ?
-                        styles.search_containerMobile : "relative border col-start-4 col-end-8 w-full col-span-5 flex items-center border-1 border-solid border-[#ddd] rounded-[50px] bg-white"}>
+                        styles.search_containerMobile : "relative border col-start-4 col-end-9 w-full col-span-5 flex items-center border-1 border-solid border-[#ddd] rounded-[50px] bg-white"}>
                     <div className="flex justify-center pr-2 pl-4">
                         <Image src={lupa} width={28} onClick={() => setIsOpenEvent(true)} alt="lupa" className={styles.search_icon} />
                     </div>
@@ -170,7 +170,7 @@ const Header = () => {
                             </div>
                         </div>
                     ) :
-                        <div className="col-start-8 col-end-13 flex justify-end md:relative items-center" ref={favoritesRef}>
+                        <div className="col-start-9 col-end-13 flex justify-end md:relative items-center" ref={favoritesRef}>
                            {isMobile && auth !== null ?  <p className='font-bold text-[#007FA4] bg-[#DBEBF1] rounded-full p-2'>{auth?.nombre[0]} {auth?.Apellido?.[0]}</p> :  <p className='font-bold mr-3'>{auth?.nombre} {auth?.Apellido}</p>}
                             {auth === null && <button onClick={() => setOpenAuth(true)}
                                 className='mr-[10px] text-white bg-[#007FA4] text-[15px] py-[10px] px-[25px] rounded-[20px] font-open-sans cursor-pointer'

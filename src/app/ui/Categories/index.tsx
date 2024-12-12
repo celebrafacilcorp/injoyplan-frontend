@@ -24,6 +24,8 @@ const Categories = ({ setOpenCategories, openCategories }: IProps) => {
 
     const isMobile = useIsMobile();
 
+    console.log(openCategories)
+
     const customStyles = {
         content: {
             top: isMobile ? '50%' : '50%',
@@ -67,9 +69,9 @@ const Categories = ({ setOpenCategories, openCategories }: IProps) => {
     const handleSelectCategory = (categoryId: string) => {
         let updatedCategories;
 
-        if (selectedCategories.includes(categoryId)) {
+        if (selectedCategories?.includes(categoryId)) {
             // Deseleccionar categoría
-            updatedCategories = selectedCategories.filter(id => id !== categoryId);
+            updatedCategories = selectedCategories?.filter(id => id !== categoryId);
         } else {
             // Seleccionar categoría
             updatedCategories = [...selectedCategories, categoryId];
@@ -103,10 +105,10 @@ const Categories = ({ setOpenCategories, openCategories }: IProps) => {
                                             <div
                                                 key={item.idCategorias}
                                                 id={item.nombreCategoria}
-                                                className={selectedCategories.includes(item.idCategorias.toString()) ? "bg-[#861F21] cursor-pointer text-center px-3 py-3 rounded" : " rounded cursor-pointer text-center bg-[#f6f6f6] px-3 py-3"}
+                                                className={selectedCategories?.includes(item?.idCategorias?.toString()) ? "bg-[#861F21] cursor-pointer text-center px-3 py-3 rounded" : " rounded cursor-pointer text-center bg-[#f6f6f6] px-3 py-3"}
                                                 onClick={() => handleSelectCategory(item.idCategorias.toString())}
                                             >
-                                                <div className={selectedCategories.includes(item.idCategorias.toString()) ? "" : styles.selected}>
+                                                <div className={selectedCategories?.includes(item.idCategorias.toString()) ? "" : styles.selected}>
                                                     <div className='w-[60px] h-[60px] flex mx-auto mt-2 mb-2'>
                                                         <ReactSVG
                                                             src={item.iconos}
@@ -118,7 +120,7 @@ const Categories = ({ setOpenCategories, openCategories }: IProps) => {
                                                         {/* <Image src={item?.iconos} className='w-full' width={100} height={100} alt={item.nombreCategoria} /> */}
                                                     </div>
                                                 </div>
-                                                <p className={selectedCategories.includes(item.idCategorias.toString()) ? 'font-semibold text-[#fff] mb-3' : 'font-semibold text-[#444] mb-3'}>{item.nombreCategoria}</p>
+                                                <p className={selectedCategories?.includes(item.idCategorias.toString()) ? 'font-semibold text-[#fff] mb-3' : 'font-semibold text-[#444] mb-3'}>{item.nombreCategoria}</p>
                                             </div>
                                         ))
                                     }

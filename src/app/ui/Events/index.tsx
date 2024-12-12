@@ -1,11 +1,11 @@
-import styles from './events.module.css'
+
 import { IEventsState, useEventStore } from '../../zustand/events'
 import { IAuthState, useAuthStore } from '../../zustand/auth'
 import { IFavoriteState, useFavoriteStore } from '../../zustand/favorites'
 import Card from '@/app/components/Card'
 import { Event } from '@/app/interfaces/event'
 
-const Events = ({ setPage, setOpenAuth }: any) => {
+const Events = ({ setPage,setLimit, setOpenAuth }: any) => {
 
     const { events }: IEventsState = useEventStore();
     const { auth }: IAuthState = useAuthStore();
@@ -50,7 +50,7 @@ const Events = ({ setPage, setOpenAuth }: any) => {
                         }
                     </div>
                     <div className='text-[#007fa4] font-bold flex justify-center mt-10 mb-10 border-2 border-solid border-[#007FA4] p-2 w-fit mx-auto rounded-full px-16'>
-                        <button onClick={() => setPage((page: any) => page + 12)} type="submit">VER MÁS EVENTOS</button>
+                        <button onClick={() => setLimit((page: any) => page + 12)} type="submit">VER MÁS EVENTOS</button>
                     </div>
                 </div>
             </div>

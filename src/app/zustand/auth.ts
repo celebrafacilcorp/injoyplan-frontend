@@ -58,7 +58,7 @@ export const useAuthStore = create<IAuthState>((set, _get) => ({
                 set({ auth: null })
             }
         } catch (error) {
-            console.error('Error during login:', error);
+            // console.error('Error during login:', error);
         }
     },
     sendEmail: async (email: IEmail ) => {
