@@ -22,7 +22,7 @@ import useOutsideClick from "@/app/hooks/useOutsideClick";
 import ReactModal from "react-modal";
 
 
-const BusquedaEvento = ({ searchValue, setOpenAuth, auth }: any) => {
+const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
 
     moment.updateLocale('es', {
         months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
@@ -38,7 +38,7 @@ const BusquedaEvento = ({ searchValue, setOpenAuth, auth }: any) => {
 
     const { getEventSearchByFilters, eventSearchByFilters }: IEventsState = useEventStore();
 
-    const [search, setSearch] = useState<any>(searchValue || typeof isOnlyNumber === "number" ? "" : isOnlyNumber);
+    const [search, setSearch] = useState<any>(typeof isOnlyNumber === "number" ? "" : isOnlyNumber);
     const { countsCategories, getCategoriesCount }: ICategoriesState = useCategoriesState();
     const [category, setCategory] = useState<number>(search?.length === 1 ? Number(search) : 0)
     const { addFavorite, deleteFavorite }: IFavoriteState = useFavoriteStore();
