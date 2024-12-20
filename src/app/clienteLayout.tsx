@@ -4,6 +4,7 @@ import Header from "./ui/Header";
 import Footer from "./ui/Footer";
 import { useEffect, useState } from "react";
 import { IAuthState, useAuthStore } from "./zustand/auth";
+import Alert from "./components/Alert";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
 
@@ -29,6 +30,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
     return (
         <div className={isModalOpen ? "blur-background pointer-events-none" : "overflow-hidden"}>
+            <Alert />
             <Header />
             {children}
             <Footer />

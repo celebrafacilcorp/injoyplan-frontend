@@ -15,7 +15,9 @@ import ReactHtmlParser from 'react-html-parser'
 import Map from '@/app/components/Map';
 import useIsMobile from '@/app/hooks/useIsMobile';
 import Link from 'next/link';
+import ticket from '../../../../../public/svg/tickets_gray.svg'
 import RelatedEvents from '@/app/ui/RelatedEvents';
+import { quicksand, sans } from '../../../../../public/fonts';
 
 moment.locale('es');
 
@@ -42,20 +44,22 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
     const { addFavorite, deleteFavorite }: IFavoriteState = useFavoriteStore();
 
     useEffect(() => {
-        const sortedDataFecha = [...dataFecha || data[0]].sort((a: any, b: any) => {
-            // @ts-ignore
-            return new Date(a.FechaInicio) - new Date(b.FechaInicio);
-        });
-        setDataFechaOrdenada(sortedDataFecha);
-        console.log(sortedDataFecha)
-        // Configurar la fecha inicial como la primera disponible
-        if (sortedDataFecha.length > 0) {
-            const initialDate = moment(sortedDataFecha[0]?.FechaInicio).utc().format('dddd, D [de] MMMM [de] YYYY');
-            const days = calcularDiasRestantes(sortedDataFecha[0]?.FechaInicio); // Calcular días restantes
-            setDate(initialDate);
-            setDaysRemaining(days); // Establecer días restantes
-            setInitHour(sortedDataFecha[0]?.HoraInicio);
-            setEndHour(sortedDataFecha[0]?.HoraFinal);
+        if (data !== undefined) {
+            const sortedDataFecha = [...dataFecha || data[0]].sort((a: any, b: any) => {
+                // @ts-ignore
+                return new Date(a.FechaInicio) - new Date(b.FechaInicio);
+            });
+            setDataFechaOrdenada(sortedDataFecha);
+            console.log(sortedDataFecha)
+            // Configurar la fecha inicial como la primera disponible
+            if (sortedDataFecha.length > 0) {
+                const initialDate = moment(sortedDataFecha[0]?.FechaInicio).utc().format('dddd, D [de] MMMM [de] YYYY');
+                const days = calcularDiasRestantes(sortedDataFecha[0]?.FechaInicio); // Calcular días restantes
+                setDate(initialDate);
+                setDaysRemaining(days); // Establecer días restantes
+                setInitHour(sortedDataFecha[0]?.HoraInicio);
+                setEndHour(sortedDataFecha[0]?.HoraFinal);
+            }
         }
     }, [dataFecha, data]);
 
@@ -87,15 +91,20 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
     }
 
     useEffect(() => {
-        if (data.length > 0) {
+        if (data !== undefined) {
             getCategoriesRelations(data[0].categoria_id);
         }
     }, [data])
 
-    const mapRef: any = useRef(null);
+    const mapRefDesktop: any = useRef(null);
+    const mapRefMobile: any = useRef(null);
 
-    const handleScrollToMap = () => {
-        mapRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const handleScrollToMapDesktop = () => {
+        mapRefDesktop.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const handleScrollToMapMobile = () => {
+        mapRefMobile.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const handleCopyLink = () => {
@@ -124,18 +133,31 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
         }
     }
 
-    console.log(data);
+    if (data === undefined) {
+        return <div>
+                <div className="text-center mt-32 mb-32">
+                    <Image className="mx-auto grayscale" width={100} height={100} alt="No encontrados" src={ticket} />
+                    <label htmlFor="" className={quicksand.className + ' font-bold text-[#4a4a4a] mb-5'}>El evento a terminado</label>
+                    <p className={sans.className + ' font-normal text-[#4a4a4a] text-[14px] mt-3'} >Al parecer no hay información sobre este evento</p>
+                </div></div>
+    }
+
+    console.log(data)
+    console.log(dataFechaOrdenada?.length)
+
+    console.log(data, initHour)
+    console.log("remaing", daysRemaining?.length)
 
     return (
         <div className="2xl:max-w-screen-2xl xl:max-w-screen-xl lg:max-w-screen-lg mx-auto mb-10 xl:px-10 px-0">
             {/* {showModal && <ModalDates setShowModal={setShowModal} showModal={showModal} dataFechaOrdenada={dataFechaOrdenada} />} */}
-            <div className='grid grid-cols-12 mt-10 gap-10'>
-                <div className="col-start-1 col-end-13 xl:col-start-1 xl:col-end-9 px-5">
+            <div className='grid grid-cols-[15] mt-10 gap-10'>
+                <div className="col-start-1 xl:col-start-1 xl:col-end-4 px-5">
                     <div>
-                        <h2 className='text-[#007FA4] text-4xl font-bold'>{data[0]?.titulo}</h2>
+                        <h2 className='text-[#007FA4] text-3xl font-bold'>{data[0]?.titulo}</h2>
                         <div>
                             <div className=''>
-                                <span className='font-sans text-md'>{date}<strong className='font-thin ml-2'>({daysRemaining})</strong></span>
+                               {daysRemaining?.length > 0 ?  <span className='font-sans text-md'>{date}<strong className='font-thin ml-2'>({daysRemaining})</strong></span> : <p>Aún por confirmar</p>}
                             </div>
                         </div>
                     </div>
@@ -175,14 +197,14 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                     {
                         // !isMobile && (
                         <div className='xl:block hidden'>
-                            <div ref={mapRef}>
+                            <div ref={mapRefDesktop}>
                                 <Map location={data[0]?.latitud_longitud} />
                             </div>
                         </div>
                     }
                 </div>
 
-                <div className="col-start-1 col-end-13 xl:col-start-9 xl:col-end-13">
+                <div className="col-start-1  xl:col-start-4 xl:col-end-[16]">
 
                     <div className="xl:items-center xl:flex xl:justify-end md:block hidden">
                         <div className='flex mr-10' onClick={handleCopyLink}>
@@ -201,27 +223,33 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                                 </div>}
                         </div>
                     </div>
-                    <div className='bg-[#f7f7fa] xl:mt-16 mt-0 xl:p-10 p-6 xl:sticky top-0 xl:top-4'>
+                    <div className='bg-[#f7f7fa] xl:mt-14 mt-0 xl:p-10 p-6 xl:sticky top-0 xl:top-4'>
                         <div>
                             <h6 className='font-bold'>Fecha y hora</h6>
-                            <p className='font-thin'>{date}. {initHour} - {endHour}</p>
+                            {date.length > 0 ? <p className='font-thin'>{date}. {initHour} - {endHour}</p> : "Aún por confirmar"}
                         </div>
 
                         <div className='mt-8 font-bold'>
-                            <h6>Otras fechas disponibles</h6>
-                            <div className='grid mt-4 grid-cols-5 gap-2'>
-                                {
-                                    dataFechaOrdenada?.slice(0, 5).map((item: any, index: number) => (
-                                        <div className='cursor-pointer border py-2.5 w-[70px] h-[70px] rounded px-3.5 bg-[#fff] border-solid border-[rgba(0,0,0,0.12)]' key={index} onClick={() => getDate(item)}>
-                                            <strong className='block text-center text-xl'>{moment(item?.FechaInicio).utc().format('D')}</strong>
-                                            <span className='font-thin text-center mx-auto block'>{moment(item?.FechaInicio).utc().format('MMM').toUpperCase()}</span>
-                                        </div>
-                                    ))
-                                }
-                            </div>
+                            <h6>{dataFechaOrdenada.length === 1 ? "Fecha Disponible" : "Otras fechas disponibles"}</h6>
+                            {dataFechaOrdenada?.length === 0 && <p className='font-normal w-[200px] mt-0'>Aún por confirmar</p>}
+                            {
+                                dataFechaOrdenada?.length > 0 && (
+                                    <div className='flex mt-5'>
+
+                                        {
+                                            dataFechaOrdenada?.slice(0, 5).map((item: any, index: number) => (
+                                                <div className='mr-3 cursor-pointer border py-2.5 w-[70px] h-[70px] rounded px-3.5 bg-[#fff] border-solid border-[rgba(0,0,0,0.12)]' key={index} onClick={() => getDate(item)}>
+                                                    <strong className='block text-center text-xl'>{moment(item?.FechaInicio).utc().format('D')}</strong>
+                                                    <span className='font-thin text-center mx-auto block'>{moment(item?.FechaInicio).utc().format('MMM').toUpperCase()}</span>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                )
+                            }
 
                             <div>
-                                {visibleItems < dataFechaOrdenada.length && (
+                                {visibleItems < dataFechaOrdenada?.length && (
                                     <button onClick={modalShowDates} className={styles.seeMoreButton}>Ver todas</button>
                                 )}
                             </div>
@@ -231,12 +259,12 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                             </div>
 
                             <div>
-                                <button onClick={handleScrollToMap} className={styles.seeMoreButton}>Ver en mapa</button>
+                                <button onClick={isMobile ? handleScrollToMapMobile : handleScrollToMapDesktop} className={styles.seeMoreButton}>Ver en mapa</button>
                             </div>
                         </div>
                         <div className="mt-7">
-                            <h6 className='font-bold mb-2'>Entradas desde</h6>
-                            <strong className='text-3xl'>S/ {Number(data[0]?.Monto).toFixed(2)}</strong>
+                            <h6 className='font-bold mb-2'>{Number(data[0]?.Monto) > 0 ? "Entradas desde" : "Entradas"}</h6>
+                            <strong className='text-3xl'>{Number(data[0]?.Monto) === 0  ? "Gratis" : 'S/ ' + Number(data[0]?.Monto).toFixed(2)}</strong>
                         </div>
                         <div className="mt-10">
                             <h6 className='font-bold'>Consigue tus entradas aquí</h6>
@@ -260,8 +288,8 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                         </div>
                     }
                     {
-                        <div className='xl:hidden block mt-5'>
-                            <div ref={mapRef} style={{ marginBottom: "15px", padding: "0px 10px" }}>
+                        <div className='xl:hidden block max-w-[96%] mx-auto mt-5'>
+                            <div ref={mapRefMobile} style={{ marginBottom: "15px", padding: "0px 10px" }}>
                                 <Map location={data[0]?.latitud_longitud} />
                             </div>
                         </div>

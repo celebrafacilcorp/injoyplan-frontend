@@ -177,8 +177,8 @@
     position: relative;
     font-weight: 700 !important;
     z-index: 1;
-    left: 0px;
-    top: -1px !important;
+    left: 28px;
+    top: -2px !important;
 }
 
 .options__selectTotal {

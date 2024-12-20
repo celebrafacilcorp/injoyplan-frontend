@@ -55,7 +55,7 @@ const Slide = ({ categoriesRelations }: any) => {
                 {
                     categoriesRelations?.map((item: Event, index: number) => {
                         return (
-                            <Card addFavoritesByUser={() => {}} key={index} item={item} />
+                            <Card addFavoritesByUser={() => {}} key={index} item={item} heartDisabled />
                         )
                     })
                 }

@@ -15,10 +15,12 @@ export const useFavoriteStore = create<IFavoriteState>((set, _get) => ({
     addFavorite: async (data: any) => {
         try {
             const resp: IResponse = await post(`usuario/createFavoritos`, data);
-            console.log(resp)
+            console.log(data)
             if (resp.HEADER.CODE === 200) {
                 useEventStore.getState().setEventsAsFavorite(data.idEvento, resp.RESPONSE);
-                useEventStore.getState().setEventDataFavorite(data.idEvento,resp.RESPONSE)
+                useEventStore.getState().setEventDataFavorite(data.idEvento,resp.RESPONSE);
+                useEventStore.getState().setEventFiltersFavorite(data.idEvento,resp.RESPONSE);
+                // useEventStore.getState().setEventDataFavorite(data.idEvento,resp.RESPONSE)
             } 
         } catch (error: any) {
             console?.error('Error during login:', error);
@@ -33,6 +35,7 @@ export const useFavoriteStore = create<IFavoriteState>((set, _get) => ({
             if (resp.HEADER.CODE === 200) {
                 useEventStore.getState().setEventsDeleteFavorite(event.favorito);
                 useEventStore.getState().setEventDataDeleteDFavorite(event.favorito);
+                useEventStore.getState().setEventDeleteFiltersFavorite(event.favorito);
             }
         } catch (error) {
             console.error('Error during login:', error);

@@ -30,7 +30,7 @@ const EventoPage = () => {
   }
 
   return (
-    <div>loading ...</div>
+    <div></div>
   )
 
 };

@@ -9,13 +9,14 @@ import Image from 'next/image';
 
 const Main = () => {
 
-    const { countsCategories }: ICategoriesState = useCategoriesState();
+    const { countsCategories,getValueCategory }: ICategoriesState = useCategoriesState();
 
     console.log(countsCategories)
 
     const navigate = useRouter();
 
     const navigateByCategory = (item: any) => {
+        getValueCategory(item)
         console.log(item)
         navigate.push(`/busqueda/${item?.idCategorias}`)
     }  

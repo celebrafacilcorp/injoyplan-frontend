@@ -14,19 +14,11 @@ export interface CalendarEvent {
 
 const dateRegex = /^(\d{1,2})\/(\d{1,2})\/(\d{1,4})$/;
 
-export const DateTime = ({ events, text, onChange, name, defaultValue, right, left, disabled, top, withOutFormat, isPackage }: any) => {
+export const DateTime = ({ events, text, onChange, name, right, left, disabled, top, withOutFormat }: any) => {
 
     const [writeDate, setWriteDate] = useState<string>("");
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [isOpen, setIsOpen, ref] = useOutsideClick(false);
-
-    useEffect(() => {
-        if (!isPackage) {
-            if (defaultValue?.length === 10 && writeDate !== defaultValue) {
-                setWriteDate(defaultValue);
-            }
-        }
-    }, [defaultValue]);
 
     const daysInMonth = (date: Date): number => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -37,7 +29,7 @@ export const DateTime = ({ events, text, onChange, name, defaultValue, right, le
     };
 
     const handleDateClick = (date: Date): void => {
-        setWriteDate(moment(date).format("DD/MM/YYYY"));
+        setWriteDate("Desde " + moment(date).format("DD/MM/YYYY"));
         setSelectedDate(date);
         setIsOpen(false);
     };
@@ -82,7 +74,6 @@ export const DateTime = ({ events, text, onChange, name, defaultValue, right, le
         const input = e.target.value;
 
         if (input.length > 10 || input.replace(dateRegex, '').length > 0) {
-            // If the input value exceeds 10 characters or contains invalid characters, do not update it
             return;
         }
 
@@ -90,8 +81,6 @@ export const DateTime = ({ events, text, onChange, name, defaultValue, right, le
 
         if (dateMatch) {
             let [_, day, month, year] = dateMatch;
-
-            // Check that the day and month are not greater than 31 and 12, respectively
             if (parseInt(day) > 31 || parseInt(month) > 12) {
                 return;
             }
@@ -125,7 +114,7 @@ export const DateTime = ({ events, text, onChange, name, defaultValue, right, le
                     <div className={styles.icon__date} >
                         <Icon icon={Icons.calendar} />
                     </div>
-                    <Input disabled={disabled} name={name} isLabel label={text} type='text' onChange={handleChangeDate} value={writeDate ? writeDate : moment(selectedDate).format('DD/MM/YYYY')} />
+                    <Input disabled={disabled} name={name} isLabel label={text} type='text' onChange={handleChangeDate} value={writeDate ? writeDate : "Desde " + moment(selectedDate).format('DD/MM/YYYY')} />
                 </div>
                 {isOpen && (
                     <motion.div

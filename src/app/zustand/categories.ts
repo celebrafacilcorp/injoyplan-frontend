@@ -9,12 +9,20 @@ export interface ICategoriesState {
     getCategoriesRelations: (id: number) => void
     countsCategories: any
     getCategoriesCount: () => void
+    categoryInfo: any
+    getValueCategory: (value: any) => void
 }
 
 export const useCategoriesState = create<ICategoriesState>((set, _get) => ({
+    categoryInfo: null,
     countsCategories: null,
     categoriesRelations: [],
     categories: [],
+    getValueCategory: (category: any) => {
+        set({
+            categoryInfo: category
+        })
+    },
     getCategories: async () => {
         try {
             const resp: IResponse = await get(`eventos/getCantEventXCategoria`);

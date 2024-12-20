@@ -5,15 +5,13 @@ import { IFavoriteState, useFavoriteStore } from '../../zustand/favorites'
 import Card from '@/app/components/Card'
 import { Event } from '@/app/interfaces/event'
 
-const Events = ({ setPage,setLimit, setOpenAuth }: any) => {
+const Events = ({ setLimit, setOpenAuth }: any) => {
 
     const { events }: IEventsState = useEventStore();
     const { auth }: IAuthState = useAuthStore();
     const { addFavorite, deleteFavorite }: IFavoriteState = useFavoriteStore();
 
-    console.log(events)
     const eventsNoDestacades = events?.filter((item: any) => item.Destacado === 0);
-    console.log(eventsNoDestacades)
 
     const addFavoritesByUser = (item: any) => {
         if (auth) {

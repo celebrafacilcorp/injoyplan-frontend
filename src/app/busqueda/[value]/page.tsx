@@ -4,7 +4,7 @@ import { IEventsState, useEventStore } from "@/app/zustand/events";
 import moment from "moment";
 import { useParams, useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
-import styles from './explorer.module.css'
+import ticket from '../../../../public/svg/tickets_gray.svg'
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { motion } from "framer-motion";
 import SelectPro from "@/app/components/SelectPro";
@@ -20,9 +20,12 @@ import Card from "@/app/components/Card";
 import { IFavoriteState, useFavoriteStore } from "@/app/zustand/favorites";
 import useOutsideClick from "@/app/hooks/useOutsideClick";
 import ReactModal from "react-modal";
+import { IAuthState, useAuthStore } from "@/app/zustand/auth";
+import Auth from "@/app/ui/Auth";
+import useAlertStore from "@/app/zustand/alert";
 
 
-const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
+const BusquedaEvento = () => {
 
     moment.updateLocale('es', {
         months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
@@ -32,17 +35,14 @@ const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
         weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_')
     });
 
-    const location = useParams();
-    const isOnlyNumber = location.value;
-    console.log(isOnlyNumber)
+    const { getEventSearchByFilters, eventSearchByFilters,total,valueSearch }: IEventsState = useEventStore();
+    const [search, setSearch] = useState<any>(valueSearch);
 
-    const { getEventSearchByFilters, eventSearchByFilters }: IEventsState = useEventStore();
-
-    const [search, setSearch] = useState<any>(typeof isOnlyNumber === "number" ? "" : isOnlyNumber);
-    const { countsCategories, getCategoriesCount }: ICategoriesState = useCategoriesState();
-    const [category, setCategory] = useState<number>(search?.length === 1 ? Number(search) : 0)
+    const { countsCategories, getCategoriesCount, categoryInfo }: ICategoriesState = useCategoriesState();
+    const [category, setCategory] = useState<number>(categoryInfo !== null ? categoryInfo?.idCategorias : 0)
     const { addFavorite, deleteFavorite }: IFavoriteState = useFavoriteStore();
-
+    const { auth }: IAuthState = useAuthStore();
+    const [openAuth, setOpenAuth] = useState<boolean>(false);
 
     const distritos = [
         { "id": 1, "value": "Cercado de Lima" },
@@ -87,43 +87,33 @@ const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
 
     const navigate = useRouter();
 
-    const searchFilters = () => {
-        let data = {
-            "categoria": search?.length === 1 ? search : 0,
-            "TipoEvento": 0,
-            "Ubicacion": "",
-            "horaInicioFin": "",
-            "fecha": "09-10-2024",
-            "busqueda": search,
-            "cantPage": 12,
-            "page": 0
-        }
-        getEventSearchByFilters(data);
-    }
-
     const [date, setDate] = useState(moment(new Date(), 'DD/MM/YYYY').format('DD-MM-YYYY'));
+    const [limit, setLimit] = useState(12);
 
-    const handleDate = (value: string, name: string) => {
-        console.log(date)
-        console.log(name)
+    const handleDate = (value: string, _name: string) => {
+        // setSearch("");
         setDate(moment(value, 'DD/MM/YYYY').format('DD-MM-YYYY'));
     }
 
-    console.log(date)
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value)
+    }
 
     useEffect(() => {
-        let data = {
-            "categoria": category,
-            "TipoEvento": 0,
-            "Ubicacion": "",
-            "horaInicioFin": "",
-            "fecha": date,
-            "busqueda": search,
-            "cantPage": 12,
-            "page": 0
+        if (search !== "" || category !== 0 || limit > 0) {
+            let data = {
+                "categoria": category,
+                "TipoEvento": 0,
+                "Ubicacion": "",
+                "horaInicioFin": "",
+                "fecha": date,
+                "busqueda": search,
+                "cantPage": limit,
+                "page": 0
+            }
+            getEventSearchByFilters(data);
         }
-        getEventSearchByFilters(data);
-    }, [search, date, category])
+    }, [search, category, limit])
 
     const searchDataFilter = () => {
         let data = {
@@ -132,8 +122,8 @@ const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
             "Ubicacion": "",
             "horaInicioFin": "",
             "fecha": date,
-            "busqueda": "",
-            "cantPage": 12,
+            "busqueda": search,
+            "cantPage": limit,
             "page": 0
         }
         setIsOpenFilter(false)
@@ -143,11 +133,12 @@ const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
     console.log(countsCategories)
 
     const handleSelectCategory = (_id: number) => {
+        // setSearch("");
         setCategory(_id)
     }
 
     const navigateEvent = (item: any) => {
-        navigate.push(`/evento/${item.ideventos}/${item.idfecha}`)
+        navigate.push(`/evento/${item?.ideventos}/${item?.idfecha}`)
     }
 
     useEffect(() => {
@@ -180,33 +171,42 @@ const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
         document.body.classList.remove('ReactModal__Body--open');
     }
 
+    console.log("EL BUSCAR", search)
+
+    console.log("EVENTOS FILTROS POR BUSQUEDA", eventSearchByFilters)
+
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            useAlertStore.getState().alert("Se ha copiado la url, compartelo con tus amigos :)", "notification");
+        }).catch(err => {
+            console.error('Error al copiar el enlace', err);
+        });
+    };
+
     return (
         <div>
             <>
+                <Auth openAuth={openAuth} setOpenAuth={setOpenAuth} />
                 <div className="bg-[#007FA4]">
                     <div className="py-14 2xl:max-w-screen-2xl xl:max-w-screen-xl mx-auto lg:max-w-screen-lg z-0 relative max-x-screen-md px-3 lg:px-4 xl:px-32">
                         <div className="">
                             <div className="flex items-center px-5 md:px-0">
                                 <div className="w-[400px] border-b border-solid border-[#fff] z-0 relative top-2">
-                                    <input className="w-full bg-transparent outline-none capitalize text-[#fff]" onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target?.value)} type="text" name='search' />
+                                    <input className="w-full bg-transparent outline-none capitalize text-[#fff]" value={search} onChange={handleChange} type="text" name='search' />
 
-                                    <div className="md:hidden relative top-[-28px] left-10 flex justify-end w-full">
-                                        <div className={styles.buttons__filters}>
-                                            <Icon icon="ei:close" onClick={() => setSearch("")} />
-                                            <div></div>
-                                            <Icon onClick={searchFilters} icon="material-symbols:search" />
-                                        </div>
+                                    <div className="absolute top-[-10px] right-2 cursor-pointer">
+                                        {search.length > 0 && <Icon icon="ei:close" width={30} color="#fff" onClick={() => setSearch("")} />}
                                     </div>
-                                </div>
-                                <div className="hidden md:block">
-                                    <button className="border-[#fff] border rounded-full text-[#fff] px-20 py-2.5 uppercase ml-3 text-[12px]" onClick={searchFilters}>Buscar</button>
+                                    <div className="absolute top-[-10px] right-2 cursor-pointer">
+                                        {search.length > 0 && <Icon icon="ei:close" width={30} color="#fff" onClick={() => setSearch("")} />}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <div className="hidden md:grid md:grid-cols-4 md:overflow-hidden xl:gap-x-32 lg:gap-x-64 gap-5 mt-10 2xl:max-w-screen-2xl xl:max-w-screen-xl mx-auto lg:max-w-screen-lg relative max-x-screen-md px-3 lg:px-4 xl:px-32">
+                    <div className="hidden md:grid md:grid-cols-4 xl:gap-x-32 lg:gap-x-64 gap-5 mt-10 2xl:max-w-screen-2xl xl:max-w-screen-xl mx-auto lg:max-w-screen-lg relative max-x-screen-md px-3 lg:px-4 xl:px-32">
                         <div className="md:col-auto sm:col-start-1 sm:col-end-5">
                             <SelectPro isIconLeft={true} options={distritos} placeholder={`Explora en Lima, Peru`} name='distrito' onChange={() => { }} />
                         </div>
@@ -217,15 +217,21 @@ const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
                             <SelectPro isIconLeft={false} options={countsCategories?.map((item: any) => ({
                                 id: item?.idCategorias,
                                 value: item?.nombreCategoria
-                            }))} placeholder={`Cualquier categoría`} name='categoria' onChange={handleSelectCategory} />
+                            }))} defaultValue={categoryInfo?.nombreCategoria} placeholder={`Cualquier categoría`} name='categoria' onChange={handleSelectCategory} />
                         </div>
 
                     </div>
-                    <div className={styles.event__notFound}>
-                        {
-                            eventSearchByFilters === undefined && <p>No se encontraron resultados para este evento, por favor vuelve intentarlo</p>
-                        }
-                    </div>
+
+                    {
+                        eventSearchByFilters === undefined || eventSearchByFilters.length === 0 ? (
+                            <div className="text-center mt-32 mb-32">
+                                <Image className="mx-auto grayscale" width={100} height={100} alt="No encontrados" src={ticket} />
+                                <label htmlFor="" className={quicksand.className + ' font-bold text-[#4a4a4a] mb-5'}>No encontramos eventos</label>
+                                <p className={sans.className + ' font-normal text-[#4a4a4a] text-[14px] mt-3'} >Intenta cambiando los filtros de búsqueda </p>
+                            </div>
+                        ) : ""
+                    }
+
                     <div className="md:hidden px-8 mt-10 flex items-center justify-between">
                         <p>{eventSearchByFilters?.length} resultados</p>
                         <div className="flex cursor-pointer" onClick={() => setIsOpenFilter(true)}>
@@ -294,11 +300,30 @@ const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
                                         <div className="col-start-11 col-end-13 justify-end flex">
                                             <div className="mr-8">
                                                 <span className="text-sm flex justify-end">Desde</span>
-                                                <p className="mt-5 text-[#007FA4] text-2xl font-bold">S/ {Number(item.Monto).toFixed(2)}</p>
+                                                <p className="mt-5 text-[#007FA4] text-2xl font-bold">{item?.Monto > 0 ? `S/ ${Number(item.Monto).toFixed(2)}` : "Gratis"}</p>
                                                 {/* <h6>Visto 21 veces</h6> */}
-                                                <div className="flex justify-end">
-                                                    <Image className="mr-5 mt-2" src={comp} alt="comp" width={20} height={20} />
-                                                    <Image className="mt-2" src={corp} alt="corp" width={20} height={20} />
+                                                <div className="flex justify-end items-center">
+                                                    <div onClick={(e) => {
+                                                        handleCopyLink();
+                                                        e.preventDefault();
+                                                        e.stopPropagation(); // Evitar que el clic en el ícono de favorito navegue a la página del evento
+
+                                                    }}>
+                                                        <Icon color="#037BA1" className="mr-2 top-1 relative" icon="iconamoon:copy-light" width="26" height="26" />
+                                                    </div>
+
+                                                    <div onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation(); // Evitar que el clic en el ícono de favorito navegue a la página del evento
+                                                        addFavoritesByUser(item);
+                                                    }}>
+                                                        {item?.favorito > 0 ? <div className='relative top-4'>
+                                                            <Icon color='#037BA1' width={28} icon="mdi:heart" /><span className='text-[#037BA1] ml-3 font-bold text-md'></span>
+                                                        </div> :
+                                                            <div className='relative top-4'>
+                                                                <Image src={corp} alt="fav" width={24} /><span className='text-[#037BA1] ml-3 font-bold text-md'></span>
+                                                            </div>}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -308,6 +333,14 @@ const BusquedaEvento = ({ setOpenAuth, auth }: any) => {
                                 ))
                             }
                         </div>
+
+                        {
+                            limit >= total ? "" : (
+                                <div className='text-[#007fa4] font-bold flex justify-center mt-10 mb-10 border-2 border-solid border-[#007FA4] p-2 w-fit mx-auto rounded-full px-16'>
+                                    <button onClick={() => setLimit((page: any) => page + 12)} type="submit">VER MÁS EVENTOS</button>
+                                </div>
+                            )
+                        }
 
                         <div className="block md:hidden px-8">
                             {
