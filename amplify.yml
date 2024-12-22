@@ -8,7 +8,6 @@ frontend:
     build:
       commands:
         - pnpm build # Construye tu aplicación
-        - pnpm export # (Si usas SSG con `next export`)
   artifacts:
     baseDirectory: out # Cambia esto según la carpeta donde se genera tu aplicación
     files:
