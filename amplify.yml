@@ -4,7 +4,7 @@ frontend:
     preBuild:
       commands:
         - npm install -g pnpm # Instala pnpm globalmente
-        - pnpm install --frozen-lockfile # Instala dependencias
+        - pnpm install
     build:
       commands:
         - pnpm build # Construye tu aplicación
