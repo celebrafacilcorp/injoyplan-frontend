@@ -16,6 +16,7 @@ export const useFavoriteStore = create<IFavoriteState>((set, _get) => ({
         try {
             const resp: IResponse = await post(`usuario/createFavoritos`, data);
             console.log(data)
+            console.log(resp)
             if (resp.HEADER.CODE === 200) {
                 useEventStore.getState().setEventsAsFavorite(data.idEvento, resp.RESPONSE);
                 useEventStore.getState().setEventDataFavorite(data.idEvento,resp.RESPONSE);

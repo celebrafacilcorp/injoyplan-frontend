@@ -1,10 +1,21 @@
 import { create } from 'zustand';
 import { get } from '../utils/fetch';
 import { Event, IResponse } from '../interfaces/event';
+import useAlertStore from './alert';
+import moment from 'moment';
 
 export interface IEventsState {
     getEvents: (limit: number) => void;
+    getEventsByCategory1: (category: any) => any
+    getEventsByCategory2: (category: any) => any
+    getEventsByCategory3: (category: any) => any
+    getEventsByCategory4: (category: any) => any
+    eventsEntreteiment: Event[],
+    eventsCulture: Event[],
+    eventsTeatro: Event[],
+    eventsMusic: Event[],
     resetEventBySearch: () => void
+    resetEvent: () => void
     events: Event[];
     eventSearch: any
     total: number
@@ -17,13 +28,17 @@ export interface IEventsState {
     setEventFiltersFavorite: (idEvento: any, resp: any) => any
     setEventsDeleteFavorite: (idFavorito: any) => any
     setEventDataDeleteDFavorite: (idFavorito: any) => any
-    setEventDeleteFiltersFavorite:  (idFavorito: any) => any
+    setEventDeleteFiltersFavorite: (idFavorito: any) => any
     getEventByEventAndDate: (event: number, date: number) => any
     getEventSearchByFilters: (params: any) => any
     getValueSearch: (value: string) => any
 }
 
 export const useEventStore = create<IEventsState>((set, _get) => ({
+    eventsEntreteiment: [],
+    eventsCulture: [],
+    eventsTeatro: [],
+    eventsMusic: [],
     valueSearch: "",
     eventSearchByFilters: [],
     total: 0,
@@ -39,10 +54,15 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
             eventSearch: []
         })
     },
+    resetEvent: () => {
+        set({
+            dataEvent: null
+        })
+    },
     events: [],
     getEvents: async (limit: number) => {
         try {
-            const resp: IResponse = await get(`eventos/listarEventosxPaginate/${limit}/0`);
+            const resp: IResponse = await get(`eventos/listarEventosxPaginate/1/${limit}`);
             console.log(resp)
             if (resp.HEADER.CODE === 200) {
                 set({ events: resp.RESPONSE });
@@ -54,6 +74,8 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
         }
     },
     setEventsAsFavorite: (idEvento, resp) => {
+        console.log(idEvento, resp)
+
         set((state: any) => ({
             events: state?.events?.map((event: any) =>
                 event.ideventos === idEvento
@@ -63,6 +85,7 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
         }));
     },
     setEventFiltersFavorite: (idEvento: any, resp: number) => {
+        console.log(idEvento, resp)
         set((state: any) => ({
             eventSearchByFilters: state?.eventSearchByFilters?.map((event: any) =>
                 event.ideventos === idEvento
@@ -93,12 +116,12 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
             )
         }));
     },
-    setEventDeleteFiltersFavorite:  (favorito: any) => {
+    setEventDeleteFiltersFavorite: (favorito: any) => {
         set((state: any) => ({
             eventSearchByFilters: state?.eventSearchByFilters?.map((item: any) =>
                 item.favorito === favorito
-                        ? { ...item, favorito: null, esfavorito: 0 }
-                        : item
+                    ? { ...item, favorito: null, esfavorito: 0 }
+                    : item
             )
         }));
     },
@@ -128,20 +151,30 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
         }
     },
     getEventByEventAndDate: async (event: number, date: number) => {
+
         try {
             const resp: any = await get(`eventos/consultar_evento_seleccionado/${event}/${date}`);
             console.log(resp)
             if (resp.HEADER.CODE === 200) {
                 set({ dataEvent: resp.RESPONSE });
+
             } else {
                 set({ dataEvent: null })
             }
+
         } catch (error) {
             console.error('Error during login:', error);
         }
     },
+    // aqui se llama asi por que el api debe ser con params pero metodo get y no post 
     getEventSearchByFilters: async (data: any) => {
-        const url = 'https://squid-app-bfky7.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro'; // Mantener la URL simple si usas POST
+        console.log(data);
+        const filteredParams = Object.entries(data)
+            .filter(([_, value]) => value !== undefined)
+            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+        const query = new URLSearchParams(filteredParams).toString();
+        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`; // Mantener la URL simple si usas POST
 
         const options = {
             method: 'POST',
@@ -173,5 +206,157 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
         } catch (error) {
             console.error('Error durante la búsqueda:', error);
         }
-    }
+    },
+    getEventsByCategory1: async (params: any) => {
+        const filteredParams = Object.entries(params)
+            .filter(([_, value]) => value !== undefined)
+            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+        const query = new URLSearchParams(filteredParams).toString();
+        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`;
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params), // Enviar los datos en el cuerpo
+        };
+
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const result = await response.json();
+            console.log(result); // Mostrar la respuesta
+
+            if (result.HEADER.CODE === 200) {
+                // Manejar la respuesta exitosa
+                set({
+                    eventsMusic: params.categoria === 1 ? result.RESULT.ResponseFinal : [],
+                })
+                console.log("Resultados:", result.RESULT.ResponseFinal);
+            } else {
+                // Manejar cuando no se obtienen resultados
+                console.log("No se encontraron resultados");
+            }
+        } catch (error) {
+            console.error('Error durante la búsqueda:', error);
+        }
+    },
+    getEventsByCategory2: async (params: any) => {
+        const filteredParams = Object.entries(params)
+            .filter(([_, value]) => value !== undefined)
+            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+        const query = new URLSearchParams(filteredParams).toString();
+        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`;
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params), // Enviar los datos en el cuerpo
+        };
+
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const result = await response.json();
+            console.log(result); // Mostrar la respuesta
+
+            if (result.HEADER.CODE === 200) {
+                // Manejar la respuesta exitosa
+                set({
+                    eventsEntreteiment: params.categoria === 2 ? result.RESULT.ResponseFinal : [],
+                })
+                console.log("Resultados:", result.RESULT.ResponseFinal);
+            } else {
+                // Manejar cuando no se obtienen resultados
+                console.log("No se encontraron resultados");
+            }
+        } catch (error) {
+            console.error('Error durante la búsqueda:', error);
+        }
+    },
+    getEventsByCategory3: async (params: any) => {
+        const filteredParams = Object.entries(params)
+            .filter(([_, value]) => value !== undefined)
+            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+        const query = new URLSearchParams(filteredParams).toString();
+        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`;
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params), // Enviar los datos en el cuerpo
+        };
+
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const result = await response.json();
+            console.log(result); // Mostrar la respuesta
+
+            if (result.HEADER.CODE === 200) {
+                // Manejar la respuesta exitosa
+                set({
+                    eventsCulture: params.categoria === 3 ? result.RESULT.ResponseFinal : [],
+                })
+                console.log("Resultados:", result.RESULT.ResponseFinal);
+            } else {
+                // Manejar cuando no se obtienen resultados
+                console.log("No se encontraron resultados");
+            }
+        } catch (error) {
+            console.error('Error durante la búsqueda:', error);
+        }
+    },
+    getEventsByCategory4: async (params: any) => {
+        const filteredParams = Object.entries(params)
+            .filter(([_, value]) => value !== undefined)
+            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+        const query = new URLSearchParams(filteredParams).toString();
+        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`;
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params), // Enviar los datos en el cuerpo
+        };
+
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const result = await response.json();
+            console.log(result); // Mostrar la respuesta
+
+            if (result.HEADER.CODE === 200) {
+                // Manejar la respuesta exitosa
+                set({
+                    eventsTeatro: params.categoria === 4 ? result.RESULT.ResponseFinal : [],
+                })
+                console.log("Resultados:", result.RESULT.ResponseFinal);
+            } else {
+                // Manejar cuando no se obtienen resultados
+                console.log("No se encontraron resultados");
+            }
+        } catch (error) {
+            console.error('Error durante la búsqueda:', error);
+        }
+    },
 }));

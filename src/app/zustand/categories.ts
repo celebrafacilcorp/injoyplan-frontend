@@ -50,7 +50,7 @@ export const useCategoriesState = create<ICategoriesState>((set, _get) => ({
     },
     getCategoriesCount: async () => {
         try {
-            const resp: IResponse = await get(`eventos/getCantEventXCategoria`);
+            const resp: IResponse = await get(`eventos/getCantEventXCategoria/true`);
             console.log(resp)
             if (resp.HEADER.CODE === 200) {
                 set({ countsCategories: resp.RESPONSE });

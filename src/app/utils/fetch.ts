@@ -1,4 +1,4 @@
-const BASE_URL = 'https://squid-app-bfky7.ondigitalocean.app/api'
+const BASE_URL = 'https://goldfish-app-zbw3y.ondigitalocean.app/api'
 // const BASE_URL = 'http://119.8.153.52:2065/api/results-patient'
 // const BASE_PROD = 'https://api-dev.suiza-soft.com/results-patient'
 

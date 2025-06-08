@@ -18,6 +18,7 @@ import Link from 'next/link';
 import ticket from '../../../../../public/svg/tickets_gray.svg'
 import RelatedEvents from '@/app/ui/RelatedEvents';
 import { quicksand, sans } from '../../../../../public/fonts';
+import ModalDates from './ModalDate/ModalDates';
 
 moment.locale('es');
 
@@ -92,7 +93,7 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
 
     useEffect(() => {
         if (data !== undefined) {
-            getCategoriesRelations(data[0].categoria_id);
+            getCategoriesRelations(data[0]?.categoria_id);
         }
     }, [data])
 
@@ -133,7 +134,7 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
         }
     }
 
-    if (data === undefined) {
+    if (data === undefined || data.length === 0) {
         return <div>
                 <div className="text-center mt-32 mb-32">
                     <Image className="mx-auto grayscale" width={100} height={100} alt="No encontrados" src={ticket} />
@@ -144,7 +145,7 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
 
     return (
         <div className="2xl:max-w-screen-2xl xl:max-w-screen-xl lg:max-w-screen-lg mx-auto mb-10 xl:px-10 px-0">
-            {/* {showModal && <ModalDates setShowModal={setShowModal} showModal={showModal} dataFechaOrdenada={dataFechaOrdenada} />} */}
+            {showModal && <ModalDates setShowModal={setShowModal} showModal={showModal} dataFechaOrdenada={dataFechaOrdenada} />}
             <div className='grid grid-cols-[15] mt-10 gap-10'>
                 <div className="col-start-1 xl:col-start-1 xl:col-end-4 px-5">
                     <div>
@@ -169,7 +170,7 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                                     e.stopPropagation(); // Evitar que el clic en el ícono de favorito navegue a la página del evento
                                     addFavoritesByUser(data[0]);
                                 }}>
-                                    {data[0].favorito > 0 ? <div className='top-3'>
+                                    {data[0]?.favorito > 0 ? <div className='top-3'>
                                         <Icon className='top-3 relative' color='A3ABCC' width={20} height={20} icon="mdi:heart" /><span className='text-[#A3ABCC] ml-3 font-bold text-md'></span>
                                     </div> :
                                         <div className='relative top-3'>
@@ -209,7 +210,7 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                             e.stopPropagation(); // Evitar que el clic en el ícono de favorito navegue a la página del evento
                             addFavoritesByUser(data[0]);
                         }}>
-                            {data[0].favorito > 0 ? <div className='flex items-center'>
+                            {data[0]?.favorito > 0 ? <div className='flex items-center'>
                                 <Icon color='A3ABCC' width={20} icon="mdi:heart" /><span className='text-[#A3ABCC] ml-3 font-bold text-md'>Favorito</span>
                             </div> :
                                 <div className='flex items-center'>

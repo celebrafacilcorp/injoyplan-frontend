@@ -6,6 +6,7 @@ import heart from '../../../../public/svg/shape.svg'
 import Angle from '../../../../public/svg/angle_right.svg'
 import moment from "moment";
 import { Event } from "@/app/interfaces/event";
+import { useEventStore } from "@/app/zustand/events";
 
 interface IProps {
     key: number
@@ -16,6 +17,11 @@ interface IProps {
 }
 
 const Card = ({ item, addFavoritesByUser,height,heartDisabled }: IProps) => {
+    
+    const { resetEvent } = useEventStore();
+
+    console.log(item)
+
     return (
         <motion.div
             layout
@@ -26,6 +32,7 @@ const Card = ({ item, addFavoritesByUser,height,heartDisabled }: IProps) => {
             className={`min-h-[${height}] flex flex-col justify-between w-full mb-5 md:mb-5`}
         >
             <Link
+                onClick={() => resetEvent()}
                 href={`/evento/${item?.ideventos}/${item?.idfecha}`}
                 className='h-full w-full'>
                 <div className={heartDisabled ? "bg-[#fff] h-full w-full rounded-t-2xl rounded-b-2xl border border-solid] shadow-custom-2" : "bg-[#fff] h-full w-full rounded-t-2xl rounded-b-2xl border border-solid] shadow-custom-2 group"}>

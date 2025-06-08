@@ -109,8 +109,10 @@ const Header = () => {
         e.stopPropagation();
         deleteFavorite(item)
     }
+    console.log(events)
+    let eventsOnlyFavorites = events.length > 0 ? events?.filter((item: any) => item?.esfavorito === 1) : [] ;
 
-    let eventsOnlyFavorites = events?.filter((item: any) => item.esfavorito === 1);
+    console.log(eventsOnlyFavorites)
 
     const navigateEvent = (item: any) => {
         navigation.push(`/evento/${item?.ideventos}/${item.idfecha}`)

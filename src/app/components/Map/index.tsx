@@ -9,26 +9,28 @@ const Map = ({ location }: any) => {
     const mapRef: any = useRef()
     const mapContainerRef: any = useRef()
 
-    let locations = location.split(",")
+    let locations = location?.split(",")
     console.log(locations)
 
     useEffect(() => {
-        mapboxgl.accessToken = 'pk.eyJ1IjoiZGV2Y29kZXgiLCJhIjoiY20xaDRoN2c2MDA4aDJtb2I3bW85dmk1aSJ9.rCfKcWomIv7qTwNwKyniAA'
-        mapRef.current = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            center: [parseFloat(locations[1]), parseFloat(locations[0])],
-            zoom: zoom
-        });
+        if (location !== undefined) {
+            mapboxgl.accessToken = 'pk.eyJ1IjoiZGV2Y29kZXgiLCJhIjoiY20xaDRoN2c2MDA4aDJtb2I3bW85dmk1aSJ9.rCfKcWomIv7qTwNwKyniAA'
+            mapRef.current = new mapboxgl.Map({
+                container: mapContainerRef.current,
+                center: [parseFloat(locations[1]), parseFloat(locations[0])],
+                zoom: zoom
+            });
 
-        // Añade un marcador en la ubicación especificada
-        new mapboxgl.Marker()
-            .setLngLat([parseFloat(locations[1]), parseFloat(locations[0])])
-            .addTo(mapRef.current);
+            // Añade un marcador en la ubicación especificada
+            new mapboxgl.Marker()
+                .setLngLat([parseFloat(locations[1]), parseFloat(locations[0])])
+                .addTo(mapRef.current);
 
-        // Limpiar el mapa cuando el componente se desmonta
-        return () => {
-            mapRef.current.remove();
-        };
+            // Limpiar el mapa cuando el componente se desmonta
+            return () => {
+                mapRef.current.remove();
+            };
+        }
     }, [location])
 
     return (

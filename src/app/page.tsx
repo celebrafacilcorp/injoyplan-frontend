@@ -72,10 +72,6 @@ export default function Home() {
     return <LoadingPage />;
   }
 
-  console.log("hasVisited:", hasVisited);
-  console.log("selectedCategories:", selectedCategories);
-  console.log("openCategories:", openCategories);
-
   return (
     <div>
       <div>

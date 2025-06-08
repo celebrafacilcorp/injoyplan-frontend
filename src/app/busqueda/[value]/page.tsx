@@ -23,6 +23,7 @@ import ReactModal from "react-modal";
 import { IAuthState, useAuthStore } from "@/app/zustand/auth";
 import Auth from "@/app/ui/Auth";
 import useAlertStore from "@/app/zustand/alert";
+import useDebounce from "@/app/hooks/useDebounce";
 
 
 const BusquedaEvento = () => {
@@ -99,6 +100,10 @@ const BusquedaEvento = () => {
         setSearch(e.target.value)
     }
 
+    const searchDebounce = useDebounce(search, 1000)
+
+    console.log(date)
+
     useEffect(() => {
         if (search !== "" || category !== 0 || limit > 0) {
             let data = {
@@ -107,13 +112,13 @@ const BusquedaEvento = () => {
                 "Ubicacion": "",
                 "horaInicioFin": "",
                 "fecha": date,
-                "busqueda": search,
+                "busqueda": searchDebounce,
                 "cantPage": limit,
                 "page": 0
             }
             getEventSearchByFilters(data);
         }
-    }, [search, category, limit])
+    }, [searchDebounce, category, limit,date])
 
     const searchDataFilter = () => {
         let data = {
@@ -122,7 +127,7 @@ const BusquedaEvento = () => {
             "Ubicacion": "",
             "horaInicioFin": "",
             "fecha": date,
-            "busqueda": search,
+            "busqueda": searchDebounce,
             "cantPage": limit,
             "page": 0
         }
