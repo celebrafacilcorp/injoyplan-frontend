@@ -33,7 +33,7 @@ const Card = ({ item, addFavoritesByUser,height,heartDisabled }: IProps) => {
         >
             <Link
                 onClick={() => resetEvent()}
-                href={`/evento/${item?.ideventos}/${item?.idfecha}`}
+                href={`/evento/${item?.idEventos || item.ideventos}/${item?.idfecha}`}
                 className='h-full w-full'>
                 <div className={heartDisabled ? "bg-[#fff] h-full w-full rounded-t-2xl rounded-b-2xl border border-solid] shadow-custom-2" : "bg-[#fff] h-full w-full rounded-t-2xl rounded-b-2xl border border-solid] shadow-custom-2 group"}>
                     <div className='w-full h-56 rounded-t-2xl relative'>

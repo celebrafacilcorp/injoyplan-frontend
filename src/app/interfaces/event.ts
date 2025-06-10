@@ -6,10 +6,10 @@ interface Header {
 
 export interface Event {
     esfavorito: number | null;
-    favorito: number;
     HoraInicio: string;
     HoraFinal: string;
     FechaInicio: string;
+    idEventos: number;
     ideventos: number;
     titulo: string;
     NombreLocal: string;
@@ -23,6 +23,7 @@ export interface Event {
     estado: string | null;
     idfecha: number;
     usuario_id: number;
+    favorito: number
 }
 
 export interface IResponse {

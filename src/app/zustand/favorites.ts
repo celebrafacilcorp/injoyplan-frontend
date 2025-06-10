@@ -21,7 +21,7 @@ export const useFavoriteStore = create<IFavoriteState>((set, _get) => ({
                 useEventStore.getState().setEventsAsFavorite(data.idEvento, resp.RESPONSE);
                 useEventStore.getState().setEventDataFavorite(data.idEvento,resp.RESPONSE);
                 useEventStore.getState().setEventFiltersFavorite(data.idEvento,resp.RESPONSE);
-                // useEventStore.getState().setEventDataFavorite(data.idEvento,resp.RESPONSE)
+                useEventStore.getState().setEventDataFavorite(data.idEvento,resp.RESPONSE)
             } 
         } catch (error: any) {
             console?.error('Error during login:', error);

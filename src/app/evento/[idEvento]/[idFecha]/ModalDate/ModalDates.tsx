@@ -76,8 +76,8 @@ const ModalDates = ({ showModal, setShowModal, dataFechaOrdenada }: IProps) => {
                                         </thead>
                                         <tbody>
                                             {
-                                                dataFechaOrdenada?.map((item: any) => (
-                                                    <tr>
+                                                dataFechaOrdenada?.map((item: any, index: number) => (
+                                                    <tr key={index}>
                                                         <td><p className={styles.date__hour}>{moment(item.FechaInicio).locale('es').utc().format('dddd, D [de] MMMM [de] YYYY')}</p>
                                                             <div>{item.HoraInicio} - {item.HoraFinal}</div>
                                                         </td>

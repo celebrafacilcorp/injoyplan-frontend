@@ -9,13 +9,16 @@ import moment from 'moment'
 
 const Events = ({ setLimit, setOpenAuth }: any) => {
 
-    const { events, getEventsByCategory1,getEventsByCategory2,getEventsByCategory3,getEventsByCategory4, eventsEntreteiment, eventsCulture, eventsMusic, eventsTeatro }: IEventsState = useEventStore();
+    const { events,eventSearchByFilters, getEventsByCategory1,getEventsByCategory2,getEventsByCategory3,getEventsByCategory4, eventsEntreteiment, eventsCulture, eventsMusic, eventsTeatro }: IEventsState = useEventStore();
     const { auth }: IAuthState = useAuthStore();
     const { addFavorite, deleteFavorite }: IFavoriteState = useFavoriteStore();
 
     console.log(events)
 
     const eventsNoDestacades = events.length > 0 ? events?.filter((item: any) => item?.Destacado === 0) : [];
+
+    console.log(eventSearchByFilters)
+    console.log(events)
 
     const addFavoritesByUser = (item: any) => {
         console.log(item)
@@ -25,7 +28,7 @@ const Events = ({ setLimit, setOpenAuth }: any) => {
                 deleteFavorite(item)
             } else {
                 const data = {
-                    idEvento: item.idEventos,
+                    idEvento: item.idEventos || item.ideventos,
                     idFecha: item.idfecha,
                     registrado: false
                 }

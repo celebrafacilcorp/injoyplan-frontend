@@ -65,7 +65,11 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
             const resp: IResponse = await get(`eventos/listarEventosxPaginate/1/${limit}`);
             console.log(resp)
             if (resp.HEADER.CODE === 200) {
-                set({ events: resp.RESPONSE });
+                set({ events: resp.RESPONSE?.map((item : Event) => ({
+                    ...item,
+                    favorito: 0,
+                    esfavorito: 0
+                }))});
             } else {
                 set({ events: [] })
             }
@@ -76,19 +80,23 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
     setEventsAsFavorite: (idEvento, resp) => {
         console.log(idEvento, resp)
 
-        set((state: any) => ({
-            events: state?.events?.map((event: any) =>
-                event.ideventos === idEvento
-                    ? { ...event, esfavorito: event.esfavorito === 0 ? 1 : 0, favorito: resp }
-                    : event
-            )
-        }));
+        set((state: any) => {
+            console.log(state.events)
+            return (
+                {
+                    events: state?.events?.map((event: any) =>
+                        event.idEventos === idEvento
+                            ? { ...event, esfavorito: event.esfavorito === 0 ? 1 : 0, favorito: resp }
+                            : event
+                    )
+                });
+        })
     },
     setEventFiltersFavorite: (idEvento: any, resp: number) => {
         console.log(idEvento, resp)
         set((state: any) => ({
             eventSearchByFilters: state?.eventSearchByFilters?.map((event: any) =>
-                event.ideventos === idEvento
+                (event.ideventos || event.idEventos) === idEvento
                     ? { ...event, esfavorito: event.esfavorito === 0 ? 1 : 0, favorito: resp }
                     : event
 
@@ -100,7 +108,7 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
             dataEvent: state?.dataEvent?.map((dataEventItem: any) => ({
                 ...dataEventItem,
                 data: dataEventItem?.data?.map((item: any) =>
-                    item.ideventos === idEvento
+                    (item.ideventos || item.idEventos) === idEvento
                         ? { ...item, favorito: resp }
                         : item
                 ),
@@ -151,7 +159,7 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
         }
     },
     getEventByEventAndDate: async (event: number, date: number) => {
-
+        console.log(event)
         try {
             const resp: any = await get(`eventos/consultar_evento_seleccionado/${event}/${date}`);
             console.log(resp)
