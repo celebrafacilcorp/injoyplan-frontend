@@ -25,7 +25,7 @@ export const useCategoriesState = create<ICategoriesState>((set, _get) => ({
     },
     getCategories: async () => {
         try {
-            const resp: IResponse = await get(`eventos/getCantEventXCategoria`);
+            const resp: IResponse = await get(`eventos/getCantEventXCategoria/true`);
             if (resp.HEADER.CODE === 200) {
                 set({ categories: resp.RESPONSE });
             } else {

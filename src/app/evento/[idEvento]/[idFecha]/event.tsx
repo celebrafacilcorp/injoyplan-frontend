@@ -259,7 +259,7 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
                         </div>
                         <div className="mt-7">
                             <h6 className='font-bold mb-2'>{Number(data[0]?.Monto) > 0 ? "Entradas desde" : "Entradas"}</h6>
-                            <strong className='text-3xl'>{Number(data[0]?.Monto) === 0  ? "Gratis" : 'S/ ' + Number(data[0]?.Monto).toFixed(2)}</strong>
+                            <strong className='text-3xl'>{Number(data[0]?.Monto) === 0  ? "¡Gratis!" : 'S/ ' + Number(data[0]?.Monto).toFixed(2)}</strong>
                         </div>
                         <div className="mt-10">
                             <h6 className='font-bold'>Consigue tus entradas aquí</h6>

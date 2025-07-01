@@ -68,7 +68,7 @@ const Card = ({ item, addFavoritesByUser,height,heartDisabled }: IProps) => {
                         </div>
                         <div>
                             <strong className='text-[10px] font-bold uppercase text-[#212121]'>Desde</strong>
-                            <h4 className='font-bold text-xl text-[#212121]'>{Number(item?.Monto) > 0 ? `S/ ${item?.Monto.toFixed(2)}` : "Gratis"}</h4>
+                            <h4 className='font-bold text-xl text-[#212121]'>{Number(item?.Monto) > 0 ? `S/ ${item?.Monto.toFixed(2)}` : "¡Gratis!"}</h4>
                         </div>
                     </div>
                 </div>

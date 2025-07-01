@@ -53,6 +53,8 @@ const Categories = ({ setOpenCategories, openCategories }: IProps) => {
         getCategories();
     }, [])
 
+    console.log(categories)
+
     const handleContinue = () => {
         document.body.classList.remove('ReactModal__Body--open');
         setOpenCategories(false)

@@ -27,6 +27,7 @@ const Auth = ({ openAuth, setOpenAuth }: IProps) => {
     const [isRegister, setIsRegister] = useState<boolean>(false);
     const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
     const { signIn, login, success }: IAuthState = useAuthStore();
+    const [isToogleViewPassword, setIsToggleViewPassword] = useState<boolean>(false)
 
     const isMobile = useIsMobile();
 
@@ -118,6 +119,12 @@ const Auth = ({ openAuth, setOpenAuth }: IProps) => {
         setOpenAuth(false)
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => {
+        if (e.key === 'Enter' && isFormValid()) {
+            handleSubmit();
+        }
+    };
+
     return (
         <ReactModal ariaHideApp={false} isOpen={openAuth} style={customStyles}>
             <motion.div
@@ -145,23 +152,27 @@ const Auth = ({ openAuth, setOpenAuth }: IProps) => {
                                     <div className="grid grid-cols-2 gap-4 mt-8">
                                         <div>
                                             <label className='font-normal font-sans' htmlFor="nombre">Nombres</label>
-                                            <input className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="text" name='nombre' value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                                            <input onKeyDown={handleKeyDown} className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="text" name='nombre' value={nombre} onChange={(e) => setNombre(e.target.value)} />
                                         </div>
                                         <div>
                                             <label className='font-normal font-sans' htmlFor="apellido">Apellidos</label>
-                                            <input className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="text" name='apellido' value={apellido} onChange={(e) => setApellido(e.target.value)} />
+                                            <input onKeyDown={handleKeyDown} className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="text" name='apellido' value={apellido} onChange={(e) => setApellido(e.target.value)} />
                                         </div>
                                     </div>
                                 )
                             }
                             <div>
                                 <label className='font-normal block mt-3 font-sans' htmlFor="email">Email</label>
-                                <input className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="text" name='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <input onKeyDown={handleKeyDown} className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="text" name='email' value={email} onChange={(e) => setEmail(e.target.value)} />
                             </div>
                             <div className={isRegister ? "grid grid-cols-2 gap-4 " : ""}>
-                                <div>
+                                <div className='relative'>
+                                    {
+                                        isToogleViewPassword ? <Icon onClick={() => setIsToggleViewPassword(false)} className='absolute right-3 top-8 cursor-pointer' icon="lucide:eye-off" width="25" height="25" /> :
+                                            <Icon onClick={() => setIsToggleViewPassword(true)} className='absolute right-3 top-8 cursor-pointer' icon="icon-park-outline:eyes" width="25" height="25" />
+                                    }
                                     <label className='font-normal block mt-3 font-sans' htmlFor="password">Contraseña</label>
-                                    <input className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    <input onKeyDown={handleKeyDown} className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type={isToogleViewPassword ? "text" : "password"} name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                 </div>
                                 {
                                     isRegister && (
@@ -186,12 +197,13 @@ const Auth = ({ openAuth, setOpenAuth }: IProps) => {
                                                 className='relative top-1 mr-1'
                                                 checked={isTermsAccepted}
                                                 onChange={(e) => setIsTermsAccepted(e.target.checked)}
+                                                onKeyDown={handleKeyDown}
                                             />
                                             <p className='text-sm mt-0'>Al hacer click en <strong>Registrarte</strong>, aceptas los términos y condiciones, nuestra política de privacidad y política de cookies.</p>
                                         </div>
                                         <div className='flex items-start mt-3'>
                                             <input type="checkbox" className='relative top-1 mr-1' />
-                                            <p className='text-sm mt-0'>Autorizo el uso de mis datos personales para recibir información, ofertas, promociones, o contenido publicitario o comercial relacionado con esta web, Injoyplan y sus vinculados.</p>
+                                            <p className='text-sm mt-0'>Declaro que he leído y acepto los Términos y Condiciones, la Política de cookies y la Política de privacidad y autorizo el tratamiento de mis datos personales para la prestación del servicio ofrecido por esta plataforma.</p>
                                         </div>
                                     </>
                                 )

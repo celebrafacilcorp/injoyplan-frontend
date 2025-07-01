@@ -63,6 +63,7 @@ export const useAuthStore = create<IAuthState>((set, _get) => ({
                 set({ auth: null })
             }
         } catch (error) {
+            set({ auth: null })
             // console.error('Error during login:', error);
         }
     },

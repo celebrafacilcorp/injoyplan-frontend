@@ -42,6 +42,8 @@ const ModalDates = ({ showModal, setShowModal, dataFechaOrdenada }: IProps) => {
         exit: { opacity: 0, scale: 0.8 }
     };
 
+    console.log(dataFechaOrdenada)
+
     return (
         <ReactModal ariaHideApp={false} isOpen={showModal} style={customStyles}>
             {

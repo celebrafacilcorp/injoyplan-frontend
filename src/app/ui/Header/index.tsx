@@ -30,7 +30,7 @@ moment.locale('es');
 const Header = () => {
 
 
-    const { auth }: IAuthState = useAuthStore();
+    const { auth, me }: IAuthState = useAuthStore();
     const { getEventBySearch, eventSearch, resetEventBySearch, events, getValueSearch }: IEventsState = useEventStore();
     const { getFavorites, deleteFavorite }: IFavoriteState = useFavoriteStore();
     const [isOpenEvent, setIsOpenEvent, refEvent] = useOutsideClick(false);
@@ -38,9 +38,7 @@ const Header = () => {
     const [openAuth, setOpenAuth] = useState<boolean>(false);
     const navigation = useRouter()
     const path = usePathname();
-
-    console.log(path)
-
+    const token = localStorage.getItem('token');
     useEffect(() => {
         getFavorites();
     }, [])
@@ -109,10 +107,8 @@ const Header = () => {
         e.stopPropagation();
         deleteFavorite(item)
     }
-    console.log(events)
-    let eventsOnlyFavorites = events.length > 0 ? events?.filter((item: any) => item?.esfavorito === 1) : [] ;
 
-    console.log(eventsOnlyFavorites)
+    let eventsOnlyFavorites = events.length > 0 ? events?.filter((item: any) => item?.esfavorito === 1) : [];
 
     const navigateEvent = (item: any) => {
         navigation.push(`/evento/${item?.ideventos}/${item.idfecha}`)
@@ -144,8 +140,6 @@ const Header = () => {
         );
     }
 
-    console.log(eventSearch)
-
     const closeModal = () => {
         document.body.classList.remove('ReactModal__Body--open');
         setIsOpenFavorite(false);
@@ -158,14 +152,21 @@ const Header = () => {
     }, [isOpenFavorite, isOpenEvent]);
 
     const logout = () => {
-        localStorage.clear();
-        window.location.href = "/"
-    }
+        localStorage.removeItem('token');
+        setOpenAuth(true); // Add this line to open the Auth modal
+    };
+
+    useEffect(() => {
+        me();
+    }, [token])
+
+    console.log(auth)
+    console.log(token)
 
     return (
         <div className="border-b border-solid border-[#EDEFF5] bg-[#F9FAFC]">
             <Auth openAuth={openAuth} setOpenAuth={setOpenAuth} />
-            <div className="2xl:max-w-screen-2xl xl:max-w-screen-xl xl:px-10 max-w-[998px] h-18 py-6 px-1 mx-auto items-center grid grid-cols-12">
+            <div className="2xl:max-w-screen-2xl xl:max-w-screen-xl xl:px-10 max-w-[998px] h-18 py-3 px-1 mx-auto items-center grid grid-cols-12">
                 <Link className='w-48' href="/"><Image src={logo} alt="logo" className='w-full' height={400} width={300} /></Link>
                 {
                     !path.startsWith("/busqueda") && (
@@ -233,7 +234,7 @@ const Header = () => {
                                                                             saveSearch(search)
 
                                                                         }} className='pt-4 md:p-4 border-t border-solid border-[#ddd]'>
-                                                                            <Link className='text-md text-[#1087AA]' href={`/busqueda/${search}`}><p>Ver todos los resultados por <strong>{search}</strong></p></Link>
+                                                                            <Link className='text-md text-[#1087AA]' href={`/busqueda/${search}`}><p>Ver todos los resultados para <strong>{search}</strong></p></Link>
                                                                         </div>
                                                                     )
                                                                 }
@@ -325,7 +326,7 @@ const Header = () => {
                                                                                 saveSearch(search)
 
                                                                             }} className='pt-4 md:p-4 border-t border-solid border-[#ddd]'>
-                                                                                <Link className='text-md text-[#1087AA]' href={`/busqueda/${search}`}><p>Ver todos los resultados por <strong>{search}</strong></p></Link>
+                                                                                <Link className='text-md text-[#1087AA]' href={`/busqueda/${search}`}><p>Ver todos los resultados para <strong>{search}</strong></p></Link>
                                                                             </div>
                                                                         )
                                                                     }
@@ -390,21 +391,29 @@ const Header = () => {
                         <div className="col-start-9 col-end-13 flex justify-end md:relative items-center" ref={favoritesRef}>
                             {isMobile && auth !== null ? <button onClick={logout} className='mr-[10px] text-white bg-[#007FA4] text-[15px] p-2 rounded-[20px] font-open-sans cursor-pointer'><Icon icon="material-symbols:logout" width="24" height="24" /></button> : <p className='font-bold mr-3'>{auth?.nombre} {auth?.Apellido}</p>}
                             {auth === null && !isMobile ? (
-                                <button onClick={() => setOpenAuth(true)}
-                                    className='mr-[10px] text-white bg-[#007FA4] text-[15px] py-[10px] px-[25px] rounded-[20px] font-open-sans cursor-pointer'
-                                >Ingresar</button>
+                                <>
+
+                                    <button onClick={() => setOpenAuth(true)}
+                                        className='mr-[10px] text-white bg-[#007FA4] text-[15px] py-[10px] px-[25px] rounded-[20px] font-open-sans cursor-pointer'
+                                    >Ingresar</button></>
                             ) :
                                 auth === null && isMobile && (
-                                    <button onClick={() => setOpenAuth(true)}
-                                        className='mr-[10px] text-white bg-[#007FA4] text-[15px] p-2 rounded-[20px] font-open-sans cursor-pointer'
-                                    ><Icon icon="solar:user-bold" width="24" height="24" /></button>
+                                    <>
+
+                                        <button onClick={() => setOpenAuth(true)}
+                                            className='mr-[10px] text-white bg-[#007FA4] text-[15px] p-2 rounded-[20px] font-open-sans cursor-pointer'
+                                        ><Icon icon="solar:user-bold" width="24" height="24" /></button>
+                                    </>
+
                                 )
                             }
                             {
                                 isMobile &&
                                 <Image onClick={() => setIsOpenEvent(true)} className='mr-2 ml-2' src={lupaMobile} alt="lupa" width={30} height={30} />
                             }
-
+                            {
+                                auth !== null && !isMobile && <button onClick={logout} className='mr-[10px] text-white bg-[#007FA4] text-[15px] p-2 rounded-[20px] font-open-sans cursor-pointer'><Icon icon="material-symbols:logout" width="24" height="24" /></button>
+                            }
                             {
                                 isOpenFavorite ? (
                                     <Image src={heartWhite} className='md:bg-[#007FA4] cursor-pointer rounded-full p-2' alt="cora" width={43} height={43} onClick={() => setIsOpenFavorite(true)} />

@@ -36,7 +36,7 @@ const BusquedaEvento = () => {
         weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_')
     });
 
-    const { getEventSearchByFilters, eventSearchByFilters,total,valueSearch }: IEventsState = useEventStore();
+    const { getEventSearchByFilters, eventSearchByFilters, total, valueSearch }: IEventsState = useEventStore();
     const [search, setSearch] = useState<any>(valueSearch);
 
     const { countsCategories, getCategoriesCount, categoryInfo }: ICategoriesState = useCategoriesState();
@@ -118,7 +118,7 @@ const BusquedaEvento = () => {
             }
             getEventSearchByFilters(data);
         }
-    }, [searchDebounce, category, limit,date])
+    }, [searchDebounce, category, limit, date])
 
     const searchDataFilter = () => {
         let data = {
@@ -176,10 +176,6 @@ const BusquedaEvento = () => {
         document.body.classList.remove('ReactModal__Body--open');
     }
 
-    console.log("EL BUSCAR", search)
-
-    console.log("EVENTOS FILTROS POR BUSQUEDA", eventSearchByFilters)
-
     const handleCopyLink = () => {
         navigator.clipboard.writeText(window.location.href).then(() => {
             useAlertStore.getState().alert("Se ha copiado la url, compartelo con tus amigos :)", "notification");
@@ -187,6 +183,8 @@ const BusquedaEvento = () => {
             console.error('Error al copiar el enlace', err);
         });
     };
+
+    console.log(search)
 
     return (
         <div>
@@ -197,8 +195,8 @@ const BusquedaEvento = () => {
                         <div className="">
                             <div className="flex items-center px-5 md:px-0">
                                 <div className="w-[400px] border-b border-solid border-[#fff] z-0 relative top-2">
-                                    <input className="w-full bg-transparent outline-none capitalize text-[#fff]" value={search} onChange={handleChange} type="text" name='search' />
-
+                                    <input value={search} placeholder="Ingresa tu busqueda" className="placeholder:text-[#fff] w-full bg-transparent outline-none capitalize text-[#fff]" onChange={handleChange} type="text" name='search' />
+                                    {search.length === 0 && <Icon icon="ei:search" className="absolute right-2 top-[-8px]" width={30} color="#fff" onClick={() => setSearch("")} />}
                                     <div className="absolute top-[-10px] right-2 cursor-pointer">
                                         {search.length > 0 && <Icon icon="ei:close" width={30} color="#fff" onClick={() => setSearch("")} />}
                                     </div>
@@ -305,7 +303,7 @@ const BusquedaEvento = () => {
                                         <div className="col-start-11 col-end-13 justify-end flex">
                                             <div className="mr-8">
                                                 <span className="text-sm flex justify-end">Desde</span>
-                                                <p className="mt-5 text-[#007FA4] text-2xl font-bold">{item?.Monto > 0 ? `S/ ${Number(item.Monto).toFixed(2)}` : "Gratis"}</p>
+                                                <p className="mt-5 text-[#007FA4] text-2xl font-bold">{item?.Monto > 0 ? `S/ ${Number(item.Monto).toFixed(2)}` : "¡Gratis!"}</p>
                                                 {/* <h6>Visto 21 veces</h6> */}
                                                 <div className="flex justify-end items-center">
                                                     <div onClick={(e) => {
