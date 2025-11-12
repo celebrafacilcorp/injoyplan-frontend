@@ -19,7 +19,7 @@ export default function Home() {
   const [hasVisited, setHasVisited] = useState<boolean | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string | null>(null);
 
-  const { getEvents }: IEventsState = useEventStore();
+  const { getEvents, getEventsDestacades }: IEventsState = useEventStore();
   const { getCategoriesCount }: ICategoriesState = useCategoriesState();
 
   useEffect(() => {
@@ -28,6 +28,7 @@ export default function Home() {
 
   useEffect(() => {
     getEvents(limit); // Pasamos el límite actual
+    getEventsDestacades();
   }, [limit]);
 
   useEffect(() => {
@@ -48,16 +49,16 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    if (hasVisited === false) {
-      localStorage.setItem("hasVisited", "true");
-      localStorage.setItem("selectedCategories", "[]");
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 2000); // Ajusta el tiempo según tus necesidades
-      return () => clearTimeout(timer);
-    }
-  }, [hasVisited]);
+  // useEffect(() => {
+  //   if (hasVisited === false) {
+  //     localStorage.setItem("hasVisited", "true");
+  //     localStorage.setItem("selectedCategories", "[]");
+  //     const timer = setTimeout(() => {
+  //       setLoading(false);
+  //     }, 2000); // Ajusta el tiempo según tus necesidades
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [hasVisited]);
 
   useEffect(() => {
     if (hasVisited) {

@@ -37,7 +37,8 @@ const Auth = ({ openAuth, setOpenAuth }: IProps) => {
     const [genero, setGenero] = useState<string>("Seleccionar");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-
+    const [emailError, setEmailError] = useState<string>("");
+    const [passwordError, setPasswordError] = useState<string>("");
     const customStyles = {
         content: {
             top: isMobile ? '50%' : '50%',
@@ -60,6 +61,33 @@ const Auth = ({ openAuth, setOpenAuth }: IProps) => {
             zIndex: 999, // Ensure the overlay is above the blurred content
         }
     };
+
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password: string): boolean => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
+    useEffect(() => {
+        if (email.trim() !== "") {
+            setEmailError(validateEmail(email) ? "" : "Por favor, ingresa un correo electrónico válido.");
+        }
+    }, [email]);
+
+    useEffect(() => {
+        // valida la contrasena que tenga un minimo de 8 caracteres tambien que tenga una mayuscula, una minuscula, un numero y un simbolo
+        if (password.trim() !== "") {
+            if (password.length < 8) {
+                setPasswordError("Por favor, ingresa una contraseña con al menos 8 caracteres.");
+            } else {
+                setPasswordError("");
+            }
+        }
+    }, [password]);
 
     const isFormValid = (): boolean => {
         if (isRegister) {
@@ -108,9 +136,16 @@ const Auth = ({ openAuth, setOpenAuth }: IProps) => {
         }
     };
 
+    console.log(success)
+
     useEffect(() => {
         if (success === true) {
             onCloseModal();
+            setApellido("")
+            setEmail("")
+            setGenero("Seleccionar")
+            setNombre("")
+            setPassword("")
         }
     }, [success])
 
@@ -158,12 +193,16 @@ const Auth = ({ openAuth, setOpenAuth }: IProps) => {
                                             <label className='font-normal font-sans' htmlFor="apellido">Apellidos</label>
                                             <input onKeyDown={handleKeyDown} className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="text" name='apellido' value={apellido} onChange={(e) => setApellido(e.target.value)} />
                                         </div>
+                                        
+                                        
                                     </div>
                                 )
                             }
                             <div>
                                 <label className='font-normal block mt-3 font-sans' htmlFor="email">Email</label>
-                                <input onKeyDown={handleKeyDown} className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="text" name='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                                {/* Implementa en este input que solo acepte correo y que muestre un error si no es un correo utlizando hook */}
+                                <input pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" onKeyDown={handleKeyDown} className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type="email" name='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <p className="text-red-500 text-[12px] font-bold mt-2">{emailError}</p>
                             </div>
                             <div className={isRegister ? "grid grid-cols-2 gap-4 " : ""}>
                                 <div className='relative'>
@@ -173,6 +212,11 @@ const Auth = ({ openAuth, setOpenAuth }: IProps) => {
                                     }
                                     <label className='font-normal block mt-3 font-sans' htmlFor="password">Contraseña</label>
                                     <input onKeyDown={handleKeyDown} className='bg-[#F7F7F7] outline-none border border-solid border-[#ddd] w-full p-2 rounded-md' type={isToogleViewPassword ? "text" : "password"} name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    <p className="text-red-500 text-[12px] font-bold mt-2">{passwordError}</p>
+                                    {/* Agregar olvidar contrasena */}
+                                    <div className="flex justify-end">
+                                        <p className="text-[#007FA4] mt-3 text-sm cursor-pointer font-bold" onClick={() => setOpenAuth(false)}>¿Olvidaste tu contrasena?</p>
+                                    </div>
                                 </div>
                                 {
                                     isRegister && (

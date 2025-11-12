@@ -4,6 +4,7 @@ import styles from './modaldates.module.css'
 import { Dispatch } from "react";
 import moment from "moment";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Link from "next/link";
 
 interface IProps {
     showModal: boolean
@@ -74,16 +75,22 @@ const ModalDates = ({ showModal, setShowModal, dataFechaOrdenada }: IProps) => {
                                                 <td>
                                                     Precio desde
                                                 </td>
+                                                <td>
+
+                                                </td>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {
                                                 dataFechaOrdenada?.map((item: any, index: number) => (
-                                                    <tr key={index}>
-                                                        <td><p className={styles.date__hour}>{moment(item.FechaInicio).locale('es').utc().format('dddd, D [de] MMMM [de] YYYY')}</p>
+                                                    <tr key={index} className="items-center">
+                                                        <td><p className="mt-4 w-[260px]">{moment(item.FechaInicio).locale('es').utc().format('dddd D MMMM')}</p>
                                                             <div>{item.HoraInicio} - {item.HoraFinal}</div>
                                                         </td>
-                                                        <td className={styles.mount}>S/ {Number(item.monto).toFixed(2)}</td>
+                                                        <td className="w-[150px]">S/ {Number(item.monto).toFixed(2)}</td>
+                                                        <td className="w-[150px]">
+                                                            <Link className="text-[#9A2A2B] uppercase font-semibold" href={`/evento/${item?.idfecha}/${item?.evento_id}`}>Ver evento</Link>
+                                                        </td>
                                                     </tr>
                                                 ))
                                             }

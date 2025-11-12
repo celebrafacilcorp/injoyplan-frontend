@@ -3,14 +3,13 @@ import "./globals.css";
 import Header from "./ui/Header";
 import Footer from "./ui/Footer";
 import { useEffect, useState } from "react";
-import { IAuthState, useAuthStore } from "./zustand/auth";
+
 import Alert from "./components/Alert";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { me } : IAuthState = useAuthStore();
-    
+
     useEffect(() => {
         const checkModalClass = () => {
             const modalElements = document.getElementsByClassName("ReactModal__Body--open");
@@ -23,10 +22,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
         return () => observer.disconnect();
     }, []);
-
-    useEffect(() => {
-        me();  // Llamas a la función `me` para obtener la información del usuario
-    }, [me]);
 
     return (
         <div className={isModalOpen ? "blur-background pointer-events-none" : "overflow-hidden"}>

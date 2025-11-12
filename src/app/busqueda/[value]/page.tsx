@@ -2,7 +2,7 @@
 import { ICategoriesState, useCategoriesState } from "@/app/zustand/categories";
 import { IEventsState, useEventStore } from "@/app/zustand/events";
 import moment from "moment";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import ticket from '../../../../public/svg/tickets_gray.svg'
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -104,6 +104,8 @@ const BusquedaEvento = () => {
 
     console.log(date)
 
+    // fijate que puedo hacer para que getEventSearchByFilters se llame solo cuando el usuario haga una busqueda    
+    // por ahora se llama cada vez que el usuario cambia el valor de searchDebounce, category, limit o date
     useEffect(() => {
         if (search !== "" || category !== 0 || limit > 0) {
             let data = {
@@ -217,16 +219,16 @@ const BusquedaEvento = () => {
                             <DateTime onChange={handleDate} name="dateStart" placeholder="desde hoy" />
                         </div>
                         <div className="md:col-auto col-start-1 col-end-5">
-                            <SelectPro isIconLeft={false} options={countsCategories?.map((item: any) => ({
+                            <SelectPro isIconLeft={false} options={[{ id: 0, value: "Todas las categorías" }, ...(countsCategories?.map((item: any) => ({
                                 id: item?.idCategorias,
                                 value: item?.nombreCategoria
-                            }))} defaultValue={categoryInfo?.nombreCategoria} placeholder={`Cualquier categoría`} name='categoria' onChange={handleSelectCategory} />
+                            })) || [])]} defaultValue={categoryInfo?.nombreCategoria} placeholder={`Todas las categorías`} name='categoria' onChange={handleSelectCategory} />
                         </div>
 
                     </div>
 
                     {
-                        eventSearchByFilters === undefined || eventSearchByFilters.length === 0 ? (
+                        eventSearchByFilters === undefined || eventSearchByFilters?.length === 0 ? (
                             <div className="text-center mt-32 mb-32">
                                 <Image className="mx-auto grayscale" width={100} height={100} alt="No encontrados" src={ticket} />
                                 <label htmlFor="" className={quicksand.className + ' font-bold text-[#4a4a4a] mb-5'}>No encontramos eventos</label>
@@ -258,10 +260,10 @@ const BusquedaEvento = () => {
                                             <DateTime onChange={handleDate} name="dateStart" placeholder="desde hoy" />
                                         </div>
                                         <div className="md:col-auto col-start-1 col-end-5 mt-5 pb-10 w-full">
-                                            <SelectPro isIconLeft={false} options={countsCategories?.map((item: any) => ({
+                                            <SelectPro isIconLeft={false} options={[{ id: 0, value: "Todas las categorias" }, ...countsCategories?.map((item: any) => ({
                                                 id: item?.idCategorias,
                                                 value: item?.nombreCategoria
-                                            }))} placeholder={`Cualquier categoría`} name='categoria' onChange={handleSelectCategory} />
+                                            }))]} placeholder={`Todas las categorias`} name='categoria' onChange={handleSelectCategory} />
                                         </div>
                                         <div className="border-t border-solid border-[#ddd]"></div>
                                         <div className="flex w-full">
@@ -276,63 +278,69 @@ const BusquedaEvento = () => {
                         <div className="hidden md:block">
                             {
                                 eventSearchByFilters?.map((item: any, index: number) => (
-                                    <motion.div className="max-h-[200px] grid rounded-2xl items-center grid-cols-12 shadow-custom-2 mb-16 relative"
-                                        key={index}
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => navigateEvent(item)}
-                                        layout
-                                        initial={{ opacity: 0, y: 50 }}  // Animación inicial (fuera de la vista)
-                                        animate={{ opacity: 1, y: 0 }}  // Animación al entrar (desplazamiento hacia arriba)
-                                        exit={{ opacity: 0, y: -50 }}  // Animación al salir (desplazamiento hacia abajo)
-                                        transition={{ duration: 0.5, ease: "easeInOut" }}  // Transición suave
-                                    >
-                                        <div className="col-start-1 col-end-2 text-center">
-                                            <strong className={`${quicksand.className} block font-[900] text-5xl text-[#444]`}>{moment(item?.FechaInicio)?.format('DD')}</strong>
-                                            <span className={`${quicksand.className}font-sans font-[700] text-2xl text-[#444]`}>{moment(item?.FechaInicio)?.format('MMM').toUpperCase()}</span>
-                                        </div>
-                                        <div className="col-start-2 col-end-6 max-h-[200px]">
-                                            <div className="max-h-[200px] w-full">
-                                                <Image width={250} height={200} className="h-[revert-layer] w-full object-fill" src={item?.url} alt="imagenes1" />
+                                    <div key={`${item?.idEventos ?? item?.ideventos}-${item?.idfecha ?? item?.FechaInicio}-${index}`}>
+                                        <motion.div {...({ className: "max-h-[200px] grid rounded-2xl items-center grid-cols-12 shadow-custom-2 mb-16 relative" }) as any}
+                                            // key={`${item?.idEventos ?? item?.ideventos}-${item?.idfecha ?? item?.FechaInicio}-${index}`}
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => navigateEvent(item)}
+                                            layout
+                                            initial={{ opacity: 0, y: 50 }}  // Animación inicial (fuera de la vista)
+                                            animate={{ opacity: 1, y: 0 }}  // Animación al entrar (desplazamiento hacia arriba)
+                                            exit={{ opacity: 0, y: -50 }}  // Animación al salir (desplazamiento hacia abajo)
+                                            transition={{ duration: 0.5, ease: "easeInOut" }}  // Transición suave
+                                        >
+                                            <div className="col-start-1 col-end-2 text-center">
+                                                <strong className={`${quicksand.className} block font-[900] text-5xl text-[#444]`}>{moment(item?.FechaInicio)?.format('DD')}</strong>
+                                                <span className={`${quicksand.className}font-sans font-[700] text-2xl text-[#444]`}>{moment(item?.FechaInicio)?.format('MMM').toUpperCase()}</span>
                                             </div>
-                                        </div>
-                                        <div className="col-start-6 col-end-11">
-                                            <h3 className={`${sans.className} ml-10 font-bold font-sans text-2xl text-[#444]`}>{item?.titulo}</h3>
-                                            <h6 className={`${sans.className} ml-10 mt-4 font-[300] font-sans`}>{moment(item?.FechaInicio)?.format('ddd')} {item?.HoraInicio} - {item?.HoraFinal}</h6>
-                                            <h5 className={`${sans.className} ml-10 font-[300] font-sans`}>{item?.NombreLocal}</h5>
-                                        </div>
-                                        <div className="col-start-11 col-end-13 justify-end flex">
-                                            <div className="mr-8">
-                                                <span className="text-sm flex justify-end">Desde</span>
-                                                <p className="mt-5 text-[#007FA4] text-2xl font-bold">{item?.Monto > 0 ? `S/ ${Number(item.Monto).toFixed(2)}` : "¡Gratis!"}</p>
-                                                {/* <h6>Visto 21 veces</h6> */}
-                                                <div className="flex justify-end items-center">
-                                                    <div onClick={(e) => {
-                                                        handleCopyLink();
-                                                        e.preventDefault();
-                                                        e.stopPropagation(); // Evitar que el clic en el ícono de favorito navegue a la página del evento
+                                            <div className="col-start-2 col-end-6 max-h-[200px]">
+                                                <div className="max-h-[200px] w-full">
+                                                    {item?.imagen ? (
+                                                        <Image width={250} height={200} className="h-[revert-layer] w-full object-fill" src={item.imagen} alt="imagenes1" />
+                                                    ) : (
+                                                        <div className="h-[200px] w-full bg-[#f2f2f2]" />
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="col-start-6 col-end-11">
+                                                <h3 className={`${sans.className} ml-10 font-bold font-sans text-2xl text-[#444]`}>{item?.titulo}</h3>
+                                                <h6 className={`${sans.className} ml-10 mt-4 font-[300] text-[14px] font-sans`}>{moment(item?.FechaInicio)?.format('ddd')} {item?.HoraInicio} - {item?.HoraFinal}</h6>
+                                                <h5 className={`${sans.className} ml-10 mt-1 font-[300] text-[14px] font-sans`}>{item?.descripcion}</h5>
+                                            </div>
+                                            <div className="col-start-11 col-end-13 justify-end flex">
+                                                <div className="mr-8">
+                                                    <span className="text-sm flex justify-end">Desde</span>
+                                                    <p className="mt-5 text-[#007FA4] text-2xl font-bold">{item?.Monto > 0 ? `S/ ${Number(item.Monto).toFixed(2)}` : "¡Gratis!"}</p>
+                                                    {/* <h6>Visto 21 veces</h6> */}
+                                                    <div className="flex justify-end items-center">
+                                                        <div onClick={(e) => {
+                                                            handleCopyLink();
+                                                            e.preventDefault();
+                                                            e.stopPropagation(); // Evitar que el clic en el ícono de favorito navegue a la página del evento
 
-                                                    }}>
-                                                        <Icon color="#037BA1" className="mr-2 top-1 relative" icon="iconamoon:copy-light" width="26" height="26" />
-                                                    </div>
+                                                        }}>
+                                                            <Icon color="#037BA1" className="mr-2 top-1 relative" icon="iconamoon:copy-light" width="26" height="26" />
+                                                        </div>
 
-                                                    <div onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation(); // Evitar que el clic en el ícono de favorito navegue a la página del evento
-                                                        addFavoritesByUser(item);
-                                                    }}>
-                                                        {item?.favorito > 0 ? <div className='relative top-4'>
-                                                            <Icon color='#037BA1' width={28} icon="mdi:heart" /><span className='text-[#037BA1] ml-3 font-bold text-md'></span>
-                                                        </div> :
-                                                            <div className='relative top-4'>
-                                                                <Image src={corp} alt="fav" width={24} /><span className='text-[#037BA1] ml-3 font-bold text-md'></span>
-                                                            </div>}
+                                                        <div onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation(); // Evitar que el clic en el ícono de favorito navegue a la página del evento
+                                                            addFavoritesByUser(item);
+                                                        }}>
+                                                            {item?.favorito > 0 ? <div className='relative top-4'>
+                                                                <Icon color='#037BA1' width={28} icon="mdi:heart" /><span className='text-[#037BA1] ml-3 font-bold text-md'></span>
+                                                            </div> :
+                                                                <div className='relative top-4'>
+                                                                    <Image src={corp} alt="fav" width={24} /><span className='text-[#037BA1] ml-3 font-bold text-md'></span>
+                                                                </div>}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <Link className="font-[900] absolute bottom-[-30px] left-[110px] text-[#A3ABCC] text-xs flex items-center" href="/about">VER FUENTE <Image className="ml-2" src={flc} alt="flc" width={15} height={15} /></Link>
-                                    </motion.div>
+                                            <Link className="font-[900] absolute bottom-[-30px] left-[110px] text-[#A3ABCC] text-xs flex items-center" href="/about">VER FUENTE <Image className="ml-2" src={flc} alt="flc" width={15} height={15} /></Link>
+                                        </motion.div>
+                                    </div>
                                 ))
                             }
                         </div>
@@ -348,7 +356,7 @@ const BusquedaEvento = () => {
                         <div className="block md:hidden px-8">
                             {
                                 eventSearchByFilters?.map((item: any, index: number) => (
-                                    <Card item={item} height={450} key={index} addFavoritesByUser={addFavoritesByUser} />
+                                    <Card item={item} height={450} key={`${item?.idEventos ?? item?.ideventos}-${item?.idfecha ?? item?.FechaInicio}-${index}`} addFavoritesByUser={addFavoritesByUser} />
                                 ))
                             }
                         </div>

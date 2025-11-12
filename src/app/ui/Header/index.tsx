@@ -24,21 +24,23 @@ import { usePathname } from 'next/navigation'
 import { quicksand, sans } from '../../../../public/fonts';
 import 'moment/locale/es'; // Importa el idioma español
 import ReactModal from 'react-modal';
+import useDebounce from '@/app/hooks/useDebounce';
 
 moment.locale('es');
 
 const Header = () => {
 
 
-    const { auth, me }: IAuthState = useAuthStore();
+    const { auth, me, logout }: IAuthState = useAuthStore();
     const { getEventBySearch, eventSearch, resetEventBySearch, events, getValueSearch }: IEventsState = useEventStore();
-    const { getFavorites, deleteFavorite }: IFavoriteState = useFavoriteStore();
+    const { getFavorites, deleteFavorite, favorites }: IFavoriteState = useFavoriteStore();
     const [isOpenEvent, setIsOpenEvent, refEvent] = useOutsideClick(false);
     const [isOpenFavorite, setIsOpenFavorite, refFavorite] = useOutsideClick(false);
     const [openAuth, setOpenAuth] = useState<boolean>(false);
     const navigation = useRouter()
     const path = usePathname();
-    const token = localStorage.getItem('token');
+    const [token, setToken] = useState<string | null>(null);
+
     useEffect(() => {
         getFavorites();
     }, [])
@@ -49,35 +51,44 @@ const Header = () => {
     const favoritesRef = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLDivElement>(null);
 
+    const debounceSearch = useDebounce(search, 1000)
+
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
     useEffect(() => {
-        if (search.length <= 3) {
+        if (typeof window !== "undefined") {
+            const t = localStorage.getItem("token");
+            setToken(t);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (debounceSearch.length <= 3) {
             const savedSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
             setRecentSearches(savedSearches);
         }
-    }, [search]);
+    }, [debounceSearch]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {
-        if (search?.length > 3 && eventSearch?.length === 0 && !isOpenEvent) {
+        if (debounceSearch?.length > 3 && eventSearch?.length === 0 && !isOpenEvent) {
             setFindResults(true);
         }
-    }, [search, eventSearch, isOpenEvent]);
+    }, [debounceSearch, eventSearch, isOpenEvent]);
 
     useEffect(() => {
-        if (search?.length > 3) {
+        if (debounceSearch?.length > 3) {
             setIsOpenEvent(true)
             setFindResults(true);
-            getEventBySearch(search);
+            getEventBySearch(debounceSearch);
         } else {
             setFindResults(false);
             resetEventBySearch();
         }
-    }, [search])
+    }, [debounceSearch])
 
     useEffect(() => {
         resetEventBySearch();
@@ -108,7 +119,7 @@ const Header = () => {
         deleteFavorite(item)
     }
 
-    let eventsOnlyFavorites = events.length > 0 ? events?.filter((item: any) => item?.esfavorito === 1) : [];
+    const eventsOnlyFavorites = favorites ?? [];
 
     const navigateEvent = (item: any) => {
         navigation.push(`/evento/${item?.ideventos}/${item.idfecha}`)
@@ -151,17 +162,18 @@ const Header = () => {
         };
     }, [isOpenFavorite, isOpenEvent]);
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        setOpenAuth(true); // Add this line to open the Auth modal
+    const logoutUser = () => {
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("token");
+        }
+        logout();
     };
 
     useEffect(() => {
         me();
-    }, [token])
+    }, [])
 
-    console.log(auth)
-    console.log(token)
+    console.log(eventsOnlyFavorites)
 
     return (
         <div className="border-b border-solid border-[#EDEFF5] bg-[#F9FAFC]">
@@ -247,7 +259,7 @@ const Header = () => {
                                                                 {
                                                                     isFindResult ? <>
                                                                         <div>
-                                                                            <p className='p-4 py-5 text-[#862020]'>Ver todos los resultados para <strong>{search}</strong></p>
+                                                                            <p className='p-4 py-5 text-[#222]'>Ver todos los resultados para <strong>{search}</strong></p>
                                                                         </div>
                                                                     </> :
                                                                         <>
@@ -412,7 +424,7 @@ const Header = () => {
                                 <Image onClick={() => setIsOpenEvent(true)} className='mr-2 ml-2' src={lupaMobile} alt="lupa" width={30} height={30} />
                             }
                             {
-                                auth !== null && !isMobile && <button onClick={logout} className='mr-[10px] text-white bg-[#007FA4] text-[15px] p-2 rounded-[20px] font-open-sans cursor-pointer'><Icon icon="material-symbols:logout" width="24" height="24" /></button>
+                                auth !== null && !isMobile && <button onClick={logoutUser} className='mr-[10px] text-white bg-[#007FA4] text-[15px] p-2 rounded-[20px] font-open-sans cursor-pointer'><Icon icon="material-symbols:logout" width="24" height="24" /></button>
                             }
                             {
                                 isOpenFavorite ? (
@@ -435,7 +447,7 @@ const Header = () => {
                                             <ul>
                                                 <div>
                                                     <div className='sticky top-0 bg-[#fff] z-50'>
-                                                        <h6 className='text-[18px] text-center md:text-left text-[#333] font-bold p-3 px-5 border-b border-solid border-[#e8e8e8]'>Favoritos</h6>
+                                                        <h6 className='text-[18px] text-center md:text-left text-[#333] font-bold p-3 px-5 border-b border-solid border-[#e8e8e8]'>Favosssritos</h6>
                                                         {
                                                             isMobile && <div className={styles.closeFavorites}>
                                                                 <Icon className='cursor-pointer absolute right-4 top-4' width={24} icon="ic:baseline-close" onClick={closeModal} />

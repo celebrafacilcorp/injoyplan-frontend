@@ -22,6 +22,8 @@ export const useFavoriteStore = create<IFavoriteState>((set, _get) => ({
                 useEventStore.getState().setEventDataFavorite(data.idEvento,resp.RESPONSE);
                 useEventStore.getState().setEventFiltersFavorite(data.idEvento,resp.RESPONSE);
                 useEventStore.getState().setEventDataFavorite(data.idEvento,resp.RESPONSE)
+                // refresh favorites list so UI (Header) picks up changes
+                await _get().getFavorites();
             } 
         } catch (error: any) {
             console?.error('Error during login:', error);
@@ -31,12 +33,14 @@ export const useFavoriteStore = create<IFavoriteState>((set, _get) => ({
         console.log(event)
         try {
             // console.log(id);
-            const resp: IResponse = await del(`usuario/eliminar_favoritos/${event.favorito}`);
+            const resp: IResponse = await del(`usuario/eliminar_favoritos/${event.idfavoritos}`);
             console.log(resp)
             if (resp.HEADER.CODE === 200) {
                 useEventStore.getState().setEventsDeleteFavorite(event.favorito);
                 useEventStore.getState().setEventDataDeleteDFavorite(event.favorito);
                 useEventStore.getState().setEventDeleteFiltersFavorite(event.favorito);
+                // refresh favorites list after deletion
+                await _get().getFavorites();
             }
         } catch (error) {
             console.error('Error during login:', error);

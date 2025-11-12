@@ -1,33 +1,22 @@
-import styles from './icon.module.css';
+"use client";
+
+import styles from "./icon.module.css";
 
 interface IProps {
-    fill?: string
-    width?: string
-    height?: string
-    className?: string
-    viewBox?: string
-    xmlns?: string
-    onClick?: any
-    xmlnsXlink?: string
-    children?: React.ReactNode
-    icon: any
+  className?: string;
+  onClick?: any;
+  children?: React.ReactNode;
+  icon: string; // 👈 asegúrate que es un string
 }
 
-const Svg = ({ children, icon, ...props }: IProps | any) => {
-
-    let convertingStringHTML = function (str : string) {
-        let parser = new DOMParser();
-        let doc = parser.parseFromString(str, 'text/html');
-        return doc.body.innerHTML;
-    }
-
-    return (
-        <div className={styles.icon} dangerouslySetInnerHTML={{
-            __html: convertingStringHTML(icon)
-        }}{...props}>
-
-        </div>
-    )
-}
+const Svg = ({ children, icon, ...props }: IProps) => {
+  return (
+    <div
+      className={styles.icon}
+      dangerouslySetInnerHTML={{ __html: icon }} // 👈 siempre mismo valor SSR/CSR
+      {...props}
+    />
+  );
+};
 
 export default Svg;

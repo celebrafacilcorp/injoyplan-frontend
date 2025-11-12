@@ -6,14 +6,12 @@ import moment from 'moment';
 
 export interface IEventsState {
     getEvents: (limit: number) => void;
-    getEventsByCategory1: (category: any) => any
-    getEventsByCategory2: (category: any) => any
-    getEventsByCategory3: (category: any) => any
-    getEventsByCategory4: (category: any) => any
     eventsEntreteiment: Event[],
     eventsCulture: Event[],
     eventsTeatro: Event[],
     eventsMusic: Event[],
+    eventsDestacades: Event[],
+    getEventsDestacades: () => void,
     resetEventBySearch: () => void
     resetEvent: () => void
     events: Event[];
@@ -36,6 +34,7 @@ export interface IEventsState {
 
 export const useEventStore = create<IEventsState>((set, _get) => ({
     eventsEntreteiment: [],
+    eventsDestacades: [],
     eventsCulture: [],
     eventsTeatro: [],
     eventsMusic: [],
@@ -62,16 +61,38 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
     events: [],
     getEvents: async (limit: number) => {
         try {
+            console.log(limit)
             const resp: IResponse = await get(`eventos/listarEventosxPaginate/1/${limit}`);
             console.log(resp)
             if (resp.HEADER.CODE === 200) {
-                set({ events: resp.RESPONSE?.map((item : Event) => ({
-                    ...item,
-                    favorito: 0,
-                    esfavorito: 0
-                }))});
+                set({
+                    events: resp.RESPONSE?.map((item: Event) => ({
+                        ...item,
+                        favorito: 0,
+                        esfavorito: 0
+                    }))
+                });
             } else {
                 set({ events: [] })
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    },
+    getEventsDestacades: async () => {
+        try {
+            const resp: IResponse = await get(`eventos/destacados/listarEventosxDestacados`);
+            console.log(resp)
+            if (resp.HEADER.CODE === 200) {
+                set({
+                    eventsDestacades: resp.RESPONSE?.map((item: Event) => ({
+                        ...item,
+                        favorito: 0,
+                        esfavorito: 0
+                    }))
+                });
+            } else {
+                set({ eventsDestacades: [] })
             }
         } catch (error) {
             console.error('Error during login:', error);
@@ -161,7 +182,7 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
     getEventByEventAndDate: async (event: number, date: number) => {
         console.log(event)
         try {
-            const resp: any = await get(`eventos/consultar_evento_seleccionado/${event}/${date}`);
+            const resp: any = await get(`eventos/consultar_evento_seleccionado/${date}/${event}`);
             console.log(resp)
             if (resp.HEADER.CODE === 200) {
                 set({ dataEvent: resp.RESPONSE });
@@ -182,189 +203,12 @@ export const useEventStore = create<IEventsState>((set, _get) => ({
             .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
 
         const query = new URLSearchParams(filteredParams).toString();
-        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`; // Mantener la URL simple si usas POST
+        const resp: any = await get(`eventos/eventosPublicos/listar_Eventos_Publicos_completo?${query}`); // Mantener la URL simple si usas POST
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data), // Enviar los datos en el cuerpo
-        };
-
-        try {
-            const response = await fetch(url, options);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
-            }
-            const result = await response.json();
-            console.log(result); // Mostrar la respuesta
-
-            if (result.HEADER.CODE === 200) {
-                // Manejar la respuesta exitosa
-                set({
-                    eventSearchByFilters: result.RESULT.ResponseFinal,
-                    total: result.RESULT.canti
-                })
-                console.log("Resultados:", result.RESULT.ResponseFinal);
-            } else {
-                // Manejar cuando no se obtienen resultados
-                console.log("No se encontraron resultados");
-            }
-        } catch (error) {
-            console.error('Error durante la búsqueda:', error);
+        if (resp.message === "OK") {
+            set({ eventSearchByFilters: resp.data.eventos, total: resp.data.total });
+        } else {
+            set({ eventSearchByFilters: null })
         }
-    },
-    getEventsByCategory1: async (params: any) => {
-        const filteredParams = Object.entries(params)
-            .filter(([_, value]) => value !== undefined)
-            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
-
-        const query = new URLSearchParams(filteredParams).toString();
-        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`;
-
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(params), // Enviar los datos en el cuerpo
-        };
-
-        try {
-            const response = await fetch(url, options);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
-            }
-            const result = await response.json();
-            console.log(result); // Mostrar la respuesta
-
-            if (result.HEADER.CODE === 200) {
-                // Manejar la respuesta exitosa
-                set({
-                    eventsMusic: params.categoria === 1 ? result.RESULT.ResponseFinal : [],
-                })
-                console.log("Resultados:", result.RESULT.ResponseFinal);
-            } else {
-                // Manejar cuando no se obtienen resultados
-                console.log("No se encontraron resultados");
-            }
-        } catch (error) {
-            console.error('Error durante la búsqueda:', error);
-        }
-    },
-    getEventsByCategory2: async (params: any) => {
-        const filteredParams = Object.entries(params)
-            .filter(([_, value]) => value !== undefined)
-            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
-
-        const query = new URLSearchParams(filteredParams).toString();
-        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`;
-
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(params), // Enviar los datos en el cuerpo
-        };
-
-        try {
-            const response = await fetch(url, options);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
-            }
-            const result = await response.json();
-            console.log(result); // Mostrar la respuesta
-
-            if (result.HEADER.CODE === 200) {
-                // Manejar la respuesta exitosa
-                set({
-                    eventsEntreteiment: params.categoria === 2 ? result.RESULT.ResponseFinal : [],
-                })
-                console.log("Resultados:", result.RESULT.ResponseFinal);
-            } else {
-                // Manejar cuando no se obtienen resultados
-                console.log("No se encontraron resultados");
-            }
-        } catch (error) {
-            console.error('Error durante la búsqueda:', error);
-        }
-    },
-    getEventsByCategory3: async (params: any) => {
-        const filteredParams = Object.entries(params)
-            .filter(([_, value]) => value !== undefined)
-            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
-
-        const query = new URLSearchParams(filteredParams).toString();
-        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`;
-
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(params), // Enviar los datos en el cuerpo
-        };
-
-        try {
-            const response = await fetch(url, options);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
-            }
-            const result = await response.json();
-            console.log(result); // Mostrar la respuesta
-
-            if (result.HEADER.CODE === 200) {
-                // Manejar la respuesta exitosa
-                set({
-                    eventsCulture: params.categoria === 3 ? result.RESULT.ResponseFinal : [],
-                })
-                console.log("Resultados:", result.RESULT.ResponseFinal);
-            } else {
-                // Manejar cuando no se obtienen resultados
-                console.log("No se encontraron resultados");
-            }
-        } catch (error) {
-            console.error('Error durante la búsqueda:', error);
-        }
-    },
-    getEventsByCategory4: async (params: any) => {
-        const filteredParams = Object.entries(params)
-            .filter(([_, value]) => value !== undefined)
-            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
-
-        const query = new URLSearchParams(filteredParams).toString();
-        const url = `https://goldfish-app-zbw3y.ondigitalocean.app/api/eventos/listar_Eventos_Publicos_filtro?${query}`;
-
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(params), // Enviar los datos en el cuerpo
-        };
-
-        try {
-            const response = await fetch(url, options);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
-            }
-            const result = await response.json();
-            console.log(result); // Mostrar la respuesta
-
-            if (result.HEADER.CODE === 200) {
-                // Manejar la respuesta exitosa
-                set({
-                    eventsTeatro: params.categoria === 4 ? result.RESULT.ResponseFinal : [],
-                })
-                console.log("Resultados:", result.RESULT.ResponseFinal);
-            } else {
-                // Manejar cuando no se obtienen resultados
-                console.log("No se encontraron resultados");
-            }
-        } catch (error) {
-            console.error('Error durante la búsqueda:', error);
-        }
-    },
+    }
 }));

@@ -16,7 +16,7 @@ const EventsFeatured = ({ setOpenAuth }: IProps) => {
     // const { events }: IEventsState = useEventStore();
     const { auth }: IAuthState = useAuthStore();
     const { addFavorite, deleteFavorite }: IFavoriteState = useFavoriteStore();
-    const { events } = useEventStore();
+    const { eventsDestacades } = useEventStore();
 
     const addFavoritesByUser = (item: any) => {
         if (auth) {
@@ -36,10 +36,9 @@ const EventsFeatured = ({ setOpenAuth }: IProps) => {
         }
     }
 
-    console.log(events)
-    const destacades = events?.filter((item: any) => item?.Destacado === 1);
-    console.log(destacades)
+    console.log(eventsDestacades)
 
+    const destacades = eventsDestacades?.filter((item: any) => item?.Destacado === 1);
 
     return (
         <>
@@ -51,7 +50,7 @@ const EventsFeatured = ({ setOpenAuth }: IProps) => {
                                 <div className='md:pt-12 pt-10'>
                                     <h2 className='text-3xl mb-8 font-bold text-[#444444] md:text-[#212121]'>Eventos destacados</h2>
                                 </div>
-                                <div className="grid auto-cols-min grid-cols-1 gap-5 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-3">
+                                <div className="grid auto-cols-min grid-cols-1 gap-5 2xl:grid-cols-3 xl:grid-cols-3 md:grid-cols-3">
                                     {
                                         destacades.map((item: any, index: number) => {
                                             return (

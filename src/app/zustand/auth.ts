@@ -8,6 +8,7 @@ export interface IAuthState {
     signIn: (data: any) => void;
     auth: IUser | null;
     me: () => void;
+    logout: () => void;
     login: (data: any) => void;
     sendEmail: (email: IEmail) => void
     success: boolean
@@ -79,6 +80,12 @@ export const useAuthStore = create<IAuthState>((set, _get) => ({
             }
         } catch (error) {
             console.error('Error during login:', error);
+        }
+    },
+    logout: () => {
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("token");
+            set({ auth: null, success: false });
         }
     },
 }));

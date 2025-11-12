@@ -120,9 +120,9 @@ const Footer = () => {
                 <div>
                   <Image className='p-2 mr-6 border border-solid rounded-full' width={34} height={34} objectFit='cover' src={facebook} alt="facebook" />
                 </div>
-                <div>
+                {/* <div>
                   <Image className='p-2 mr-6 border border-solid rounded-full' width={34} height={34} objectFit='cover' src={twi} alt="twi" />
-                </div>
+                </div> */}
                 <div>
                   <Image className='p-2 mr-6 border border-solid rounded-full' width={34} height={34} objectFit='cover' src={youtube} alt="youtube" />
                 </div>

@@ -40,7 +40,7 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
     const [visibleItems, _setVisibleItems] = useState<number>(5);
     const [endHour, setEndHour] = useState<string>("")
     const [showModal, setShowModal] = useState<boolean>(false);
-    const { getCategoriesRelations, categoriesRelations }: ICategoriesState = useCategoriesState();
+    const { categoriesRelations }: ICategoriesState = useCategoriesState();
     const { auth }: IAuthState = useAuthStore();
     const { addFavorite, deleteFavorite }: IFavoriteState = useFavoriteStore();
 
@@ -90,12 +90,6 @@ const EventDate = ({ data, dataFecha, dataPlataformaVenta }: any) => {
     const modalShowDates = () => {
         setShowModal(true);
     }
-
-    useEffect(() => {
-        if (data !== undefined) {
-            getCategoriesRelations(data[0]?.categoria_id);
-        }
-    }, [data])
 
     const mapRefDesktop: any = useRef(null);
     const mapRefMobile: any = useRef(null);

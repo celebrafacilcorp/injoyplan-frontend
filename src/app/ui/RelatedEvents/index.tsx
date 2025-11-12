@@ -10,7 +10,7 @@ const RelatedEvents = ({data} : any) => {
         if (data.length > 0) {
             getCategoriesRelations(data[0]?.categoria_id);
         }
-    }, [data])
+    }, [])
 
     return (
         <>
