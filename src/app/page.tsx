@@ -47,10 +47,10 @@ export default function Home() {
     setHasVisited(visited ? true : false);
     setSelectedCategories(categories);
 
-    // Configuramos openCategories si no hay categorías seleccionadas
-    if (!categories) {
-      setOpenCategories(true);
-    }
+    // Modal de categorías deshabilitado
+    // if (!categories) {
+    //   setOpenCategories(true);
+    // }
   }, []);
 
   // useEffect(() => {
