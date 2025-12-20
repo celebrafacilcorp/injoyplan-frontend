@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Icon } from '@iconify/react';
@@ -21,6 +21,14 @@ type DateForm = {
 };
 
 export default function CrearEventoPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-[#666]">Cargando...</div>}>
+      <CrearEventoContent />
+    </Suspense>
+  );
+}
+
+function CrearEventoContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams.get('edit');
